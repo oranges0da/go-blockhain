@@ -5,4 +5,7 @@ import (
 )
 
 func RunProofWork(b *block.Block) {
+	hash := 0
+
+	for i := 0; i < big.In
 }

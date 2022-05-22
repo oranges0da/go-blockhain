@@ -7,14 +7,13 @@ import (
 )
 
 func main() {
-	chain := blockchain.InitBlockchain()
+	BlockChain := blockchain.New()
 
-	chain.AddBlock("First Block")
-	chain.AddBlock("Second Block")
-	chain.AddBlock("Third Block")
+	BlockChain.AddBlock("First Block")
+	BlockChain.AddBlock("Second Block")
+	BlockChain.AddBlock("Third Block")
 
-	for _, block := range chain.blocks {
-		pow := blockchain.InitPow(block)
+	for _, block := range BlockChain.blocks {
 		blockchain.RunProofWork(chain)
 	}
 

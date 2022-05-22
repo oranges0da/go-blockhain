@@ -13,17 +13,7 @@ type Block struct {
 	Hash      []byte
 }
 
-func (b *Block) GetHash(nonce []byte) []byte {
-	concat_data := [][]byte{nonce, b.Data}
-
-	data := bytes.Join(concat_data, []byte{})
-
-	hash := sha256.Sum256(data)
-
-	return hash[:]
-}
-
-func CreateBlock(BlockId int, data string) *Block {
+func New(BlockId int, data string) *Block {
 	block := &Block{
 		BlockID:   BlockId,
 		IsGenesis: false,
@@ -35,6 +25,16 @@ func CreateBlock(BlockId int, data string) *Block {
 	block.Hash = hash
 
 	return block
+}
+
+func (b *Block) GetHash(nonce []byte) []byte {
+	concat_data := [][]byte{nonce, b.Data}
+
+	data := bytes.Join(concat_data, []byte{})
+
+	hash := sha256.Sum256(data)
+
+	return hash[:]
 }
 
 func Genesis() *Block {
