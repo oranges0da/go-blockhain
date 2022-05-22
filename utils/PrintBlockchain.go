@@ -8,4 +8,5 @@ import (
 
 func PrintBlockchain(chain *blockchain.Blockchain) {
 	fmt.Printf("Blockchain: %x\n", *chain)
+	fmt.Printf("Last Hash: %x\n", chain.LastHash)
 }

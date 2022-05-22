@@ -28,9 +28,10 @@ func (b *Block) GetHash() []byte {
 
 func NewBlock(BlockId int, PrevHash []byte, data string) *Block {
 	block := &Block{
-		BlockID:  BlockId,
-		PrevHash: PrevHash,
-		Data:     []byte(data),
+		BlockID:   BlockId,
+		IsGenesis: false,
+		PrevHash:  PrevHash,
+		Data:      []byte(data),
 	}
 
 	hash := block.GetHash()
@@ -42,9 +43,10 @@ func NewBlock(BlockId int, PrevHash []byte, data string) *Block {
 
 func Genesis() *Block {
 	block := &Block{
-		BlockID:  0,
-		PrevHash: []byte{},
-		Data:     []byte("Genesis Block"),
+		BlockID:   0,
+		IsGenesis: true,
+		PrevHash:  []byte{},
+		Data:      []byte("Genesis Block"),
 	}
 
 	return block
