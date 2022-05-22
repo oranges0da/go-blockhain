@@ -37,7 +37,7 @@ func (b *Block) GetHash(nonce []byte) []byte {
 	return hash[:]
 }
 
-func Genesis() *Block {
+func Genesis() *Block { // like New(), but only for genesis block of chain
 	block := &Block{
 		BlockID:   0,
 		IsGenesis: true,

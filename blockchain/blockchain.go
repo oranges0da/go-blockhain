@@ -3,7 +3,7 @@ package blockchain
 import "github.com/oranges0da/go-blockchain/block"
 
 type Blockchain struct {
-	LastHash []byte
+	LastHash []byte // hash of last block
 	blocks   []*block.Block
 }
 
@@ -12,7 +12,7 @@ func New() *Blockchain {
 
 	blockchain := &Blockchain{
 		LastHash: genesis.Hash,
-		blocks:   []*block.Block{genesis},
+		blocks:   []*block.Block{genesis}, // create blockchain with genesis
 	}
 
 	return blockchain
