@@ -1,21 +1,18 @@
 package blockchain
 
-import "github.com/oranges0da/go-blockchain/block"
+import (
+	"github.com/dgraph-io/badger"
+	"github.com/oranges0da/go-blockchain/block"
+)
 
 type Blockchain struct {
 	LastHash []byte // hash of last block
-	blocks   []*block.Block
+	Database *badger.DB
 }
 
 func New() *Blockchain {
-	genesis := block.Genesis()
+	db, err := badger.Open(badger.DefaultOptions("/tmp/blocks"))
 
-	blockchain := &Blockchain{
-		LastHash: genesis.Hash,
-		blocks:   []*block.Block{genesis}, // create blockchain with genesis
-	}
-
-	return blockchain
 }
 
 func (chain *Blockchain) AddBlock(data string) {
