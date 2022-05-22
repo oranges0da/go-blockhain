@@ -22,6 +22,7 @@ func (chain *Blockchain) AddBlock(data string) {
 	block := block.CreateBlock(chain.blocks[len(chain.blocks)-1].BlockID, data)
 
 	chain.blocks = append(chain.blocks, block)
+	chain.LastHash = block.Hash
 }
 
 func (chain *Blockchain) GetBlock(blockId int) *block.Block {
