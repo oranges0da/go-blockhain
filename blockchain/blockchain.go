@@ -1,40 +1,44 @@
 package blockchain
 
 import (
-	"github.com/dgraph-io/badger"
+	"log"
+	"runtime"
+
+	badger "github.com/dgraph-io/badger/v3"
 	"github.com/oranges0da/go-blockchain/block"
 	"github.com/oranges0da/go-blockchain/utils"
 )
 
 const (
 	dbPath      = "./tmp/blocks"
-	dbFile      = "./tmp/blocks/MANIFEST"
 	genesisText = "Hello, this is the genesis block!"
 )
 
 type Blockchain struct {
 	LastHash []byte // hash of last block
+	blocks   []*block.Block
 	Database *badger.DB
 }
 
 // address that first transaction must take place
 func New(address string) *Blockchain {
+	if utils.DBExists() {
+		log.Println("Blockchain already exists")
+		runtime.Goexit() // do not create new blockchain if dbFile already exists
+	}
+
 	var lastHash []byte // hash of last block
 
-	opts := badger.DefaultOptions
-	opts.Dir = dbPath
-	opts.ValueDir = dbFile
+	opts := badger.DefaultOptions(dbPath)
 
-	db, err := badger.Open(badger.DefaultOptions(opts))
+	db, err := badger.Open(opts)
 	defer db.Close()
 	utils.Handle(err)
 
-	if err := db.View(func(txn *badger.Txn) error{
-		item, err := txn.Get([]byte("lh"))
-	} { // if nothing in db, create genesis block
-
-	}
-)
+	db.Update(func(txn *badger.Txn) error {
+		// Your code here…
+		return nil
+	})
 }
 
 func (chain *Blockchain) AddBlock(data string) {
