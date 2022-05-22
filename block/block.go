@@ -19,9 +19,9 @@ func (b *Block) GetHash() []byte {
 	concat_data := [][]byte{b.PrevHash, b.Data}
 
 	data := bytes.Join(concat_data, []byte{})
-	log.Println("data: ", data)
 
 	hash := sha256.Sum256(data)
+	log.Printf("Block %d: %x\n", b.BlockID, hash)
 
 	return hash[:]
 }
@@ -48,6 +48,10 @@ func Genesis() *Block {
 		PrevHash:  []byte{},
 		Data:      []byte("Genesis Block"),
 	}
+
+	hash := block.GetHash()
+
+	block.Hash = hash
 
 	return block
 }
