@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"fmt"
-	"log"
 	"math"
 	"math/big"
 
@@ -58,7 +57,7 @@ func (pow *PoW) Run() (int64, [32]byte) {
 
 		if intHash.Cmp(pow.Target) == -1 {
 			fmt.Printf("\n")
-			log.Printf("Block found, hash: %x\n", testHash)
+			fmt.Printf("Block found, hash: %x\n", testHash)
 			hash = testHash
 			break
 		} else {
