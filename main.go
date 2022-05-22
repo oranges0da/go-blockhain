@@ -16,8 +16,9 @@ func main() {
 
 	for _, block := range BlockChain.GetBlocks() {
 		pow := proof.New(block)
-		pow.Run()
+		nonce, hash := pow.Run()
+		fmt.Printf("\rBlock: %d, Nonce: %d, Hash: %x\n", block.BlockID, nonce, hash)
 	}
 
-	fmt.Printf("Finished hashing all blocks.\n")
+	fmt.Printf("Finished mining all blocks.\n")
 }

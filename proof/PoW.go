@@ -12,7 +12,7 @@ import (
 	"github.com/oranges0da/go-blockchain/utils"
 )
 
-const diff = 12
+const diff = 20
 
 type PoW struct {
 	Target *big.Int
@@ -44,22 +44,27 @@ func (pow *PoW) PrepareData(nonce int64) []byte {
 	return data
 }
 
-func (pow *PoW) Run() {
+func (pow *PoW) Run() (int64, [32]byte) {
+	var hash [32]byte
 	var nonce int64 = 0
 	var intHash big.Int
 
 	for nonce < math.MaxInt {
 		data := pow.PrepareData(nonce)
-		hash := sha256.Sum256(data)
+		testHash := sha256.Sum256(data)
 
-		intHash.SetBytes(hash[:])
-		fmt.Printf("\r%x\n", hash)
+		intHash.SetBytes(testHash[:])
+		fmt.Printf("\r%x", testHash)
 
 		if intHash.Cmp(pow.Target) == -1 {
-			log.Printf("Block found, hash: %x\n", hash)
+			fmt.Printf("\n")
+			log.Printf("Block found, hash: %x\n", testHash)
+			hash = testHash
 			break
 		} else {
 			nonce++
 		}
 	}
+
+	return nonce, hash
 }
