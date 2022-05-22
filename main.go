@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/oranges0da/go-blockchain/blockchain"
+	"github.com/oranges0da/go-blockchain/proof"
 )
 
 func main() {
@@ -14,7 +15,8 @@ func main() {
 	BlockChain.AddBlock("Third Block")
 
 	for _, block := range BlockChain.GetBlocks() {
-		fmt.Printf("%v\n", block)
+		pow := proof.New(block)
+		pow.Run()
 	}
 
 	fmt.Printf("Finished hashing all blocks.\n")
