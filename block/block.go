@@ -1,12 +1,14 @@
-package blockchain
+package block
 
 import (
 	"bytes"
 	"crypto/sha256"
+	"log"
 )
 
 type Block struct {
 	BlockID  int
+	Nonce    int
 	PrevHash []byte
 	Data     []byte
 	Hash     []byte
@@ -14,7 +16,9 @@ type Block struct {
 
 func (b *Block) GetHash() []byte {
 	concat_data := [][]byte{b.PrevHash, b.Data}
+
 	data := bytes.Join(concat_data, []byte{})
+	log.Println("data: ", data)
 
 	hash := sha256.Sum256(data)
 

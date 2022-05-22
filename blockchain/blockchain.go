@@ -1,21 +1,24 @@
 package blockchain
 
+import "github.com/oranges0da/go-blockchain/block"
+
 type Blockchain struct {
 	LastHash []byte
-	blocks   []*Block
+	blocks   []*block.Block
 }
 
 func InitBlockchain() *Blockchain {
-	genesis := Genesis()
+	genesis := block.Genesis()
 
 	blockchain := &Blockchain{
 		LastHash: genesis.Hash,
-		blocks:   []*Block{genesis},
+		blocks:   []*block.Block{genesis},
 	}
 
 	return blockchain
 }
 
-func (chain *Blockchain) AddBlock(block Block) {
-	chain.blocks = append(chain.blocks, &block)
+func (chain *Blockchain) AddBlock(newBlock block.Block) {
+	chain.blocks = append(chain.blocks, &newBlock)
+	chain.LastHash = newBlock.Hash
 }
