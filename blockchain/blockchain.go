@@ -3,6 +3,13 @@ package blockchain
 import (
 	"github.com/dgraph-io/badger"
 	"github.com/oranges0da/go-blockchain/block"
+	"github.com/oranges0da/go-blockchain/utils"
+)
+
+const (
+	dbPath      = "./tmp/blocks"
+	dbFile      = "./tmp/blocks/MANIFEST"
+	genesisText = "Hello, this is the genesis block!"
 )
 
 type Blockchain struct {
@@ -10,9 +17,24 @@ type Blockchain struct {
 	Database *badger.DB
 }
 
-func New() *Blockchain {
-	db, err := badger.Open(badger.DefaultOptions("/tmp/blocks"))
+// address that first transaction must take place
+func New(address string) *Blockchain {
+	var lastHash []byte // hash of last block
 
+	opts := badger.DefaultOptions
+	opts.Dir = dbPath
+	opts.ValueDir = dbFile
+
+	db, err := badger.Open(badger.DefaultOptions(opts))
+	defer db.Close()
+	utils.Handle(err)
+
+	if err := db.View(func(txn *badger.Txn) error{
+		item, err := txn.Get([]byte("lh"))
+	} { // if nothing in db, create genesis block
+
+	}
+)
 }
 
 func (chain *Blockchain) AddBlock(data string) {

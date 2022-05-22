@@ -10,7 +10,7 @@ type Transaction struct {
 type TxInput struct {
 	ID  []byte
 	Sig string
-	Out int // index location in db of output
+	Out int // db index location of output of transaction
 }
 
 type TxOutput struct {
