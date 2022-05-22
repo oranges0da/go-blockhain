@@ -1,8 +1,9 @@
-package blockchain
+package proof
 
 import (
 	"bytes"
 	"crypto/sha256"
+	"fmt"
 	"log"
 	"math"
 	"math/big"
@@ -30,10 +31,11 @@ func New(block *block.Block) *PoW {
 	return pow
 }
 
-func (pow *PoW) PrepareData() []byte {
+func (pow *PoW) PrepareData(nonce int64) []byte {
 	blockData := [][]byte{
-		utils.ToByte(pow.Block.BlockID),
-		utils.ToByte(pow.Block.Nonce),
+		utils.ToByte(int64(pow.Block.BlockID)),
+		utils.ToByte(int64(pow.Block.Nonce)),
+		utils.ToByte(nonce),
 		pow.Block.Data,
 	}
 
@@ -43,19 +45,21 @@ func (pow *PoW) PrepareData() []byte {
 }
 
 func (pow *PoW) Run() {
-	nonce := 0
+	var nonce int64 = 0
 	var intHash big.Int
 
 	for nonce < math.MaxInt {
-		data := pow.PrepareData()
+		data := pow.PrepareData(nonce)
 		hash := sha256.Sum256(data)
 
-		log.Printf("\rMining current block, hash: %x\n", hash)
 		intHash.SetBytes(hash[:])
+		fmt.Printf("\r%x\n", hash)
 
 		if intHash.Cmp(pow.Target) == -1 {
 			log.Printf("Block found, hash: %x\n", hash)
 			break
+		} else {
+			nonce++
 		}
 	}
 }
