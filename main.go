@@ -13,8 +13,8 @@ func main() {
 	BlockChain.AddBlock("Second Block")
 	BlockChain.AddBlock("Third Block")
 
-	for _, block := range BlockChain.blocks {
-		blockchain.RunProofWork(chain)
+	for _, block := range BlockChain.GetBlocks() {
+		fmt.Printf("%v\n", block)
 	}
 
 	fmt.Printf("Finished hashing all blocks.\n")

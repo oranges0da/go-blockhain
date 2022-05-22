@@ -4,7 +4,7 @@ import "github.com/oranges0da/go-blockchain/block"
 
 type Blockchain struct {
 	LastHash []byte
-	blocks   []block.Block
+	blocks   []*block.Block
 }
 
 func New() *Blockchain {
@@ -12,10 +12,8 @@ func New() *Blockchain {
 
 	blockchain := &Blockchain{
 		LastHash: genesis.Hash,
-		blocks:   []block.Block{},
+		blocks:   []*block.Block{genesis},
 	}
-
-	blockchain.blocks.append(genesis)
 
 	return blockchain
 }
@@ -25,6 +23,10 @@ func (chain *Blockchain) AddBlock(data string) {
 
 	chain.blocks = append(chain.blocks, block)
 	chain.LastHash = block.Hash
+}
+
+func (chain *Blockchain) GetBlocks() []*block.Block {
+	return chain.blocks
 }
 
 func (chain *Blockchain) GetBlock(blockId int) *block.Block {
