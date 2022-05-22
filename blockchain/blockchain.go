@@ -23,6 +23,15 @@ func (chain *Blockchain) AddBlock(newBlock block.Block) {
 	chain.LastHash = newBlock.Hash
 }
 
-func (chain *Blockchain) GetBlocks() []*block.Block {
-	return chain.blocks
+func (chain *Blockchain) GetBlock(blockId int) *block.Block {
+	var block *block.Block
+
+	for _, v := range chain.blocks {
+		if v.BlockID == blockId {
+			block = v
+			break
+		}
+	}
+
+	return block
 }

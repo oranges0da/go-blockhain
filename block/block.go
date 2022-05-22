@@ -3,7 +3,6 @@ package block
 import (
 	"bytes"
 	"crypto/sha256"
-	"log"
 )
 
 type Block struct {
@@ -21,7 +20,6 @@ func (b *Block) GetHash() []byte {
 	data := bytes.Join(concat_data, []byte{})
 
 	hash := sha256.Sum256(data)
-	log.Printf("Block %d: %x\n", b.BlockID, hash)
 
 	return hash[:]
 }

@@ -1,9 +1,10 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/oranges0da/go-blockchain/block"
 	"github.com/oranges0da/go-blockchain/blockchain"
-	"github.com/oranges0da/go-blockchain/utils"
 )
 
 func main() {
@@ -17,5 +18,7 @@ func main() {
 		blockchain.AddBlock(*newBlock)
 	}
 
-	utils.PrintBlockchain(blockchain)
+	block1 := blockchain.GetBlock(0)
+
+	fmt.Printf("Block 1: %x\n", block1)
 }
