@@ -7,11 +7,12 @@ import (
 )
 
 type Block struct {
-	BlockID  int
-	Nonce    int
-	PrevHash []byte
-	Data     []byte
-	Hash     []byte
+	BlockID   int
+	Nonce     int
+	IsGenesis bool
+	PrevHash  []byte
+	Data      []byte
+	Hash      []byte
 }
 
 func (b *Block) GetHash() []byte {

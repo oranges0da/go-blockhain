@@ -22,3 +22,11 @@ func (chain *Blockchain) AddBlock(newBlock block.Block) {
 	chain.blocks = append(chain.blocks, &newBlock)
 	chain.LastHash = newBlock.Hash
 }
+
+func (chain *Blockchain) GetBlock(blockId int) *block.Block {
+	for _, block := range chain.blocks {
+		if block.BlockID == blockId {
+			return block
+		}
+	}
+}

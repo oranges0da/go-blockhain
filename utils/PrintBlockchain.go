@@ -7,5 +7,5 @@ import (
 )
 
 func PrintBlockchain(chain *blockchain.Blockchain) {
-	fmt.Printf("Blockchain: %x", *chain)
+	fmt.Printf("Blockchain: %x\n", *chain)
 }
