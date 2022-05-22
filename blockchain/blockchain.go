@@ -18,9 +18,10 @@ func InitBlockchain() *Blockchain {
 	return blockchain
 }
 
-func (chain *Blockchain) AddBlock(newBlock block.Block) {
-	chain.blocks = append(chain.blocks, &newBlock)
-	chain.LastHash = newBlock.Hash
+func (chain *Blockchain) AddBlock(data string) {
+	block := block.CreateBlock(chain.blocks[len(chain.blocks)-1].BlockID, data)
+
+	chain.blocks = append(chain.blocks, block)
 }
 
 func (chain *Blockchain) GetBlock(blockId int) *block.Block {

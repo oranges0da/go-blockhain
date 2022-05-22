@@ -1,21 +1,17 @@
 package main
 
 import (
-	"github.com/oranges0da/go-blockchain/block"
+	"fmt"
+
 	"github.com/oranges0da/go-blockchain/blockchain"
-	"github.com/oranges0da/go-blockchain/utils"
 )
 
 func main() {
-	blockchain := blockchain.InitBlockchain()
+	chain := blockchain.InitBlockchain()
 
-	blockNum := [10]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	chain.AddBlock("First Block")
+	chain.AddBlock("Second Block")
+	chain.AddBlock("Third Block")
 
-	for _, blockId := range blockNum {
-		newBlock := block.NewBlock(blockId, blockchain.LastHash, "Block #"+string(blockId))
-
-		blockchain.AddBlock(*newBlock)
-	}
-
-	utils.PrintBlock(0, blockchain)
+	fmt.Printf("%+v\n", chain)
 }

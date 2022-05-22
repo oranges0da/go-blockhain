@@ -9,13 +9,12 @@ type Block struct {
 	BlockID   int
 	Nonce     int
 	IsGenesis bool
-	PrevHash  []byte
 	Data      []byte
 	Hash      []byte
 }
 
-func (b *Block) GetHash() []byte {
-	concat_data := [][]byte{b.PrevHash, b.Data}
+func (b *Block) GetHash(nonce []byte) []byte {
+	concat_data := [][]byte{nonce, b.Data}
 
 	data := bytes.Join(concat_data, []byte{})
 
@@ -24,15 +23,14 @@ func (b *Block) GetHash() []byte {
 	return hash[:]
 }
 
-func NewBlock(BlockId int, PrevHash []byte, data string) *Block {
+func CreateBlock(BlockId int, data string) *Block {
 	block := &Block{
 		BlockID:   BlockId,
 		IsGenesis: false,
-		PrevHash:  PrevHash,
 		Data:      []byte(data),
 	}
 
-	hash := block.GetHash()
+	hash := block.GetHash([]byte{255})
 
 	block.Hash = hash
 
@@ -43,11 +41,10 @@ func Genesis() *Block {
 	block := &Block{
 		BlockID:   0,
 		IsGenesis: true,
-		PrevHash:  []byte{},
 		Data:      []byte("Genesis Block"),
 	}
 
-	hash := block.GetHash()
+	hash := block.GetHash([]byte{255})
 
 	block.Hash = hash
 
