@@ -13,7 +13,9 @@ type Block struct {
 }
 
 func (b *Block) GetHash() []byte {
-	data := bytes.Join([][]byte{b.PrevHash, b.Data}, []byte{})
+	concat_data := [][]byte{b.PrevHash, b.Data}
+	data := bytes.Join(concat_data, []byte{})
+
 	hash := sha256.Sum256(data)
 
 	return hash[:]
