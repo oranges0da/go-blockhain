@@ -11,6 +11,7 @@ import (
 
 const (
 	dbPath      = "./tmp/blocks"
+	dbValue     = "tmp/blocks/MANIFEST"
 	genesisText = "Hello, this is the genesis block!"
 )
 
@@ -21,7 +22,7 @@ type Blockchain struct {
 }
 
 // address that first transaction must take place
-func New(address string) *Blockchain {
+func New(address string) (*Blockchain, error) {
 	if utils.DBExists() {
 		log.Println("Blockchain already exists")
 		runtime.Goexit() // do not create new blockchain if dbFile already exists
@@ -30,10 +31,12 @@ func New(address string) *Blockchain {
 	var lastHash []byte // hash of last block
 
 	opts := badger.DefaultOptions(dbPath)
+	opts.Dir = dbPath
+	opts.ValueDir = dbValue
 
 	db, err := badger.Open(opts)
-	defer db.Close()
 	utils.Handle(err)
+	defer db.Close()
 
 	err = db.Update(func(txn *badger.Txn) error {
 		var errors []error
@@ -59,7 +62,7 @@ func New(address string) *Blockchain {
 		Database: db,
 	}
 
-	return chain
+	return chain, err
 }
 
 func (chain *Blockchain) AddBlock(data string) {
