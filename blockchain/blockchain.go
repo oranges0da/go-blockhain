@@ -35,14 +35,28 @@ func New(address string) *Blockchain {
 	defer db.Close()
 	utils.Handle(err)
 
-	db.Update(func(txn *badger.Txn) error {
-		// Your code here…
-		return nil
+	err = db.Update(func(txn *badger.Txn) error {
+		var errors []error
+
+		// create genesis block and convert it to byte array
+		block_genesis := block.Genesis()
+		genesis := utils.ToByte(block_genesis)
+
+		err := txn.Set(block_genesis.Hash, genesis)
+		utils.Handle(err)
+		errors = append(errors, err)
+
+		// set last hash to genesis hash
+		err = txn.Set([]byte("lh"), block_genesis.Hash)
+		utils.Handle(err)
+		errors = append(errors, err)
+
+		return errors[0]
 	})
 
 	chain := &Blockchain{
 		LastHash: lastHash,
-		blocks:   []*block.Block{},
+		Database: db,
 	}
 
 	return chain

@@ -8,12 +8,12 @@ type Transaction struct {
 }
 
 type TxInput struct {
-	ID  []byte
+	ID  []byte // transaction ID that owns this input
 	Sig string
 	Out int // db index location of output of transaction
 }
 
 type TxOutput struct {
 	Value  float64
-	PubKey string // address to send to
+	PubKey string // receiver's public key/address
 }
