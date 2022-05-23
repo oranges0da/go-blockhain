@@ -15,7 +15,7 @@ const (
 )
 
 type Blockchain struct {
-	LastHash []byte // hash of last block
+	LastHash []byte
 	blocks   []*block.Block
 	Database *badger.DB
 }
@@ -39,6 +39,13 @@ func New(address string) *Blockchain {
 		// Your code here…
 		return nil
 	})
+
+	chain := &Blockchain{
+		LastHash: lastHash,
+		blocks:   []*block.Block{},
+	}
+
+	return chain
 }
 
 func (chain *Blockchain) AddBlock(data string) {

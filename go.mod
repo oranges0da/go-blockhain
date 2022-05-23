@@ -1,4 +1,4 @@
-module github.com/oranges0da/go-blockchain
+module github.com/oranges0da/goblockchain
 
 go 1.18
 
