@@ -13,20 +13,6 @@ type Block struct {
 	Hash      []byte
 }
 
-func New(BlockId int, data string) *Block {
-	block := &Block{
-		BlockID:   BlockId,
-		IsGenesis: false,
-		Data:      []byte(data),
-	}
-
-	hash := block.GetHash([]byte{255})
-
-	block.Hash = hash
-
-	return block
-}
-
 func (b *Block) GetHash(nonce []byte) []byte {
 	concat_data := [][]byte{nonce, b.Data}
 
@@ -35,6 +21,20 @@ func (b *Block) GetHash(nonce []byte) []byte {
 	hash := sha256.Sum256(data)
 
 	return hash[:]
+}
+
+func New(BlockId int, data string) *Block {
+	block := &Block{
+		BlockID:   BlockId,
+		IsGenesis: false,
+		Data:      []byte(data),
+	}
+
+	hash := block.GetHash([]byte{255}) // 255 nonce for now
+
+	block.Hash = hash
+
+	return block
 }
 
 func Genesis() *Block { // like New(), but only for genesis block of chain

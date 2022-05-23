@@ -65,11 +65,16 @@ func New(address string) (*Blockchain, error) {
 	return chain, err
 }
 
-func (chain *Blockchain) AddBlock(data string) {
-	block := block.New(chain.blocks[len(chain.blocks)-1].BlockID, data)
+func (chain *Blockchain) AddBlock(b *block.Block) error {
+	block := utils.ToByte(b)
 
-	chain.blocks = append(chain.blocks, block)
-	chain.LastHash = block.Hash
+	err := chain.Database.Update(func(txn *badger.Txn) error {
+		err := txn.Set(b.Hash, block)
+
+		return err
+	})
+
+	return err
 }
 
 func (chain *Blockchain) GetBlocks() []*block.Block {

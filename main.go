@@ -4,20 +4,13 @@ import (
 	"fmt"
 
 	"github.com/oranges0da/goblockchain/blockchain"
-	"github.com/oranges0da/goblockchain/proof"
+	"github.com/oranges0da/goblockchain/utils"
 )
 
 func main() {
-	BlockChain := blockchain.New("askldfj")
-
-	BlockChain.AddBlock("First Block") // adding blocks manually to blockchain for now
-	BlockChain.AddBlock("Second Block")
-	BlockChain.AddBlock("Third Block")
-
-	for _, block := range BlockChain.GetBlocks() {
-		pow := proof.New(block)
-		nonce, hash := pow.Run() // running proof of work on every block
-		fmt.Printf("Block: %d, Nonce: %d, Hash: %x\n", block.BlockID, nonce, hash)
+	BlockChain, err := blockchain.New("askldfj")
+	if err != nil {
+		utils.Handle(err)
 	}
 
 	fmt.Printf("Finished mining all blocks.\n")
