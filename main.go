@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/oranges0da/go-blockchain/blockchain"
-	"github.com/oranges0da/go-blockchain/proof"
+	"github.com/oranges0da/goblockchain/blockchain"
+	"github.com/oranges0da/goblockchain/proof"
 )
 
 func main() {
-	BlockChain := blockchain.New()
+	BlockChain := blockchain.New("askldfj")
 
 	BlockChain.AddBlock("First Block") // adding blocks manually to blockchain for now
 	BlockChain.AddBlock("Second Block")

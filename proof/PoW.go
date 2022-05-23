@@ -7,8 +7,8 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/oranges0da/go-blockchain/block"
-	"github.com/oranges0da/go-blockchain/utils"
+	"github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/utils"
 )
 
 const diff = 20

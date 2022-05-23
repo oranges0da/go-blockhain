@@ -5,8 +5,8 @@ import (
 	"runtime"
 
 	badger "github.com/dgraph-io/badger/v3"
-	"github.com/oranges0da/go-blockchain/block"
-	"github.com/oranges0da/go-blockchain/utils"
+	"github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/utils"
 )
 
 const (
