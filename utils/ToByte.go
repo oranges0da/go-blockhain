@@ -2,20 +2,21 @@ package utils
 
 import (
 	"bytes"
-	"encoding/binary"
-	"log"
+	"encoding/gob"
 
 	"github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/transaction"
 )
 
 // to convert number (such as id) or block to byte array
-func ToByte[T int64 | *block.Block](data T) []byte {
-	buff := new(bytes.Buffer)
-	err := binary.Write(buff, binary.BigEndian, data)
+func ToByte[T int64 | *block.Block | *transaction.Transaction](data T) []byte {
+	var res bytes.Buffer
 
-	if err != nil {
-		log.Fatalf("Error encoding data to byte: %s", err)
-	}
+	encoder := gob.NewEncoder(&res)
 
-	return buff.Bytes()
+	err := encoder.Encode(data)
+
+	Handle(err)
+
+	return res.Bytes()
 }

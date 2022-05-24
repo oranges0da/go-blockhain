@@ -8,7 +8,7 @@ type Transaction struct {
 }
 
 type TxInput struct {
-	ID  []byte // transaction ID that owns this input
+	ID  []byte // transaction ID(hash) that owns this input
 	Sig string
 	Out int // db index location of output of transaction
 }
@@ -16,4 +16,8 @@ type TxInput struct {
 type TxOutput struct {
 	Value  float64
 	PubKey string // receiver's public key/address
+}
+
+func (tx *Transaction) HashID() {
+
 }

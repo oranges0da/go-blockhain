@@ -76,7 +76,3 @@ func (chain *Blockchain) AddBlock(b *block.Block) error {
 
 	return err
 }
-
-func (chain *Blockchain) GetBlocks() []*block.Block {
-	return chain.blocks
-}
