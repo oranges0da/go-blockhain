@@ -17,7 +17,6 @@ const (
 
 type Blockchain struct {
 	LastHash []byte
-	blocks   []*block.Block
 	Database *badger.DB
 }
 
@@ -39,22 +38,18 @@ func New(address string) (*Blockchain, error) {
 	defer db.Close()
 
 	err = db.Update(func(txn *badger.Txn) error {
-		var errors []error
-
 		// create genesis block and convert it to byte array
 		block_genesis := block.Genesis()
 		genesis := utils.ToByte(block_genesis)
 
 		err := txn.Set(block_genesis.Hash, genesis)
 		utils.Handle(err)
-		errors = append(errors, err)
 
 		// set last hash to genesis hash
 		err = txn.Set([]byte("lh"), block_genesis.Hash)
 		utils.Handle(err)
-		errors = append(errors, err)
 
-		return errors[0]
+		return err
 	})
 
 	chain := &Blockchain{
@@ -70,7 +65,9 @@ func (chain *Blockchain) AddBlock(b *block.Block) error {
 
 	err := chain.Database.Update(func(txn *badger.Txn) error {
 		err := txn.Set(b.Hash, block)
+		utils.Handle(err)
 
+		err = txn.Set([]byte("lh"), b.Hash)
 		return err
 	})
 
