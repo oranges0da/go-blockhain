@@ -8,15 +8,14 @@ import (
 	"github.com/oranges0da/goblockchain/transaction"
 )
 
-// to convert number (such as id) or block to byte array
+// to data (such as block or int) to byte, for hashing, etc
 func ToByte[T int64 | *block.Block | *transaction.Transaction](data T) []byte {
-	var res bytes.Buffer
+	var buff bytes.Buffer
 
-	encoder := gob.NewEncoder(&res)
-
+	encoder := gob.NewEncoder(&buff)
 	err := encoder.Encode(data)
 
 	Handle(err)
 
-	return res.Bytes()
+	return buff.Bytes()
 }
