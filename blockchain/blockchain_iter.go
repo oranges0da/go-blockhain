@@ -7,14 +7,14 @@ import (
 )
 
 type BlockchainIter struct {
-	currentHash []byte
-	db          *badger.DB
+	CurrentHash []byte
+	DB          *badger.DB
 }
 
 func (chain *Blockchain) NewIter() *BlockchainIter {
 	iter := &BlockchainIter{
-		currentHash: chain.LastHash,
-		db:          chain.Database,
+		CurrentHash: chain.LastHash,
+		DB:          chain.Database,
 	}
 
 	return iter
@@ -23,10 +23,10 @@ func (chain *Blockchain) NewIter() *BlockchainIter {
 func (iter *BlockchainIter) Next() *block.Block {
 	var block *block.Block
 
-	err := iter.db.View(func(txn *badger.Txn) error {
+	err := iter.DB.View(func(txn *badger.Txn) error {
 		var valCopy []byte
 
-		item, err := txn.Get(iter.currentHash)
+		item, err := txn.Get(iter.CurrentHash)
 		utils.Handle(err)
 
 		err = item.Value(func(val []byte) error {
@@ -46,7 +46,7 @@ func (iter *BlockchainIter) Next() *block.Block {
 	utils.Handle(err)
 
 	// set hash to prevHash for next iteration
-	iter.currentHash = block.PrevHash
+	iter.CurrentHash = block.PrevHash
 
 	return block
 }
