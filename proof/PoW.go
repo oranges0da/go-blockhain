@@ -35,7 +35,7 @@ func (pow *PoW) PrepareData(nonce int64) []byte {
 		utils.ToByte(int64(pow.Block.BlockID)),
 		utils.ToByte(int64(pow.Block.Nonce)),
 		utils.ToByte(nonce),
-		pow.Block.Data,
+		utils.ToByte(pow.Block.Transactions),
 	}
 
 	data := bytes.Join(blockData, []byte{})

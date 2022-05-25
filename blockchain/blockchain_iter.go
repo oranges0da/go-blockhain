@@ -1,8 +1,6 @@
 package blockchain
 
 import (
-	"fmt"
-
 	badger "github.com/dgraph-io/badger/v3"
 	"github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/utils"
@@ -23,30 +21,16 @@ func (chain *Blockchain) NewIter() *BlockchainIter {
 }
 
 func (iter *BlockchainIter) Next() *block.Block {
-	var byte_block []byte
+	var block *block.Block
 
 	err := iter.db.View(func(txn *badger.Txn) error {
-		var inner_block []byte
-
 		item, err := txn.Get(iter.currentHash)
 		utils.Handle(err)
 
-		err = item.Value(func(val []byte) error {
-			inner_block := append(inner_block, val...)
-			fmt.Printf("%s\n", inner_block)
-
-			return nil
-		})
-
-		byte_block := inner_block
-		fmt.Printf("%s\n", byte_block)
+		encoded, err := item.Value()
 
 		return err
 	})
 
-	utils.Handle(err)
-
-	block := utils.ToBlock(byte_block)
-
-	return block
+	iter.currentHash = block.PrevHash
 }

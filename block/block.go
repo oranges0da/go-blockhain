@@ -3,18 +3,20 @@ package block
 import (
 	"bytes"
 	"crypto/sha256"
+
+	"github.com/oranges0da/goblockchain/transaction"
 )
 
 type Block struct {
-	BlockID   int
-	Nonce     int
-	IsGenesis bool
-	Data      []byte
-	Hash      []byte
+	PrevHash     []byte
+	BlockID      int
+	Nonce        int
+	Transactions []*transaction.Transaction
+	Hash         []byte
 }
 
 func (b *Block) GetHash(nonce []byte) []byte {
-	concat_data := [][]byte{nonce, b.Data}
+	concat_data := [][]byte{nonce, b.Transactions}
 
 	data := bytes.Join(concat_data, []byte{})
 
@@ -23,11 +25,11 @@ func (b *Block) GetHash(nonce []byte) []byte {
 	return hash[:]
 }
 
-func New(BlockId int, data string) *Block {
+func New(BlockId int, txs []*transaction.Transaction) *Block {
 	block := &Block{
-		BlockID:   BlockId,
-		IsGenesis: false,
-		Data:      []byte(data),
+		PrevHash:     []byte{},
+		BlockID:      BlockId,
+		Transactions: txs,
 	}
 
 	hash := block.GetHash([]byte{255}) // 255 nonce for now
@@ -39,9 +41,9 @@ func New(BlockId int, data string) *Block {
 
 func Genesis() *Block { // like New(), but only for genesis block of chain
 	block := &Block{
-		BlockID:   0,
-		IsGenesis: true,
-		Data:      []byte("Genesis Block"),
+		PrevHash: []byte{0},
+		BlockID:  0,
+		Data:     []byte("Genesis Block"),
 	}
 
 	hash := block.GetHash([]byte{255})
