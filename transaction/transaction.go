@@ -1,10 +1,17 @@
 package transaction
 
+import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/gob"
+	"log"
+)
+
 type Transaction struct {
+	ID       []byte // hash of transaction
 	In       []TxInput
 	Out      []TxOutput
 	Locktime int64
-	Hash     []byte
 }
 
 type TxInput struct {
@@ -18,6 +25,21 @@ type TxOutput struct {
 	PubKey string // receiver's public key/address
 }
 
+func (tx *Transaction) HashTx() {
+	var encoded bytes.Buffer
+	var hash [32]byte
+
+	enc := gob.NewEncoder(&encoded)
+	err := enc.Encode(tx)
+
+	if err != nil {
+		log.Fatalf("Error hashing transaction: %s", err)
+	}
+
+	hash = sha256.Sum256(encoded.Bytes())
+	tx.ID = hash[:]
+}
+
 func NewCoinbase(to string, sig string) *Transaction {
 	tx := &Transaction{
 		ID:       []byte{},
@@ -26,5 +48,5 @@ func NewCoinbase(to string, sig string) *Transaction {
 		Locktime: 0,
 	}
 
-	return tx
+	tx.HashTx()
 }
