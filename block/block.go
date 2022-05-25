@@ -39,11 +39,12 @@ func New(BlockId int, txs []*transaction.Transaction) *Block {
 	return block
 }
 
-func Genesis() *Block { // like New(), but only for genesis block of chain
+func Genesis(to string) *Block { // like New(), but only for genesis block of chain
 	block := &Block{
 		PrevHash: []byte{0},
 		BlockID:  0,
-		Data:     []byte("Genesis Block"),
+		Nonce:    0,
+		Transactions: []*transaction.Transaction
 	}
 
 	hash := block.GetHash([]byte{255})
