@@ -48,5 +48,10 @@ func NewCoinbase(to string, sig string) *Transaction {
 		Locktime: 0,
 	}
 
+	tx.In = append(tx.In, TxInput{Sig: sig, Out: -1})
+	tx.Out = append(tx.Out, TxOutput{Value: 50, PubKey: to})
+
 	tx.HashTx()
+
+	return tx
 }
