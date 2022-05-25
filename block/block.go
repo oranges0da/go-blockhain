@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/gob"
-	"log"
 
 	"github.com/oranges0da/goblockchain/transaction"
 )
@@ -17,21 +16,17 @@ type Block struct {
 	Hash         []byte
 }
 
-func (b *Block) HashBlock(nonce int) [32]byte {
+func (b *Block) HashBlock(nonce int) error {
 	var encoded bytes.Buffer
 	var hash [32]byte
 
 	enc := gob.NewEncoder(&encoded)
 	err := enc.Encode(nonce)
 
-	if err != nil {
-		log.Fatalf("Error hashing transaction: %s", err)
-	}
-
 	hash = sha256.Sum256(encoded.Bytes())
-	b.Hash = hash[:]
+	b.Hash = hash[:] // set block hash
 
-	return hash
+	return err
 }
 
 func New(BlockId int, txs []*transaction.Transaction) *Block {
@@ -41,7 +36,7 @@ func New(BlockId int, txs []*transaction.Transaction) *Block {
 		Transactions: txs,
 	}
 
-	block.HashBlock([]byte{255}) // 255 nonce for now
+	block.HashBlock(255) // 255 nonce for now
 
 	return block
 }
@@ -56,7 +51,7 @@ func Genesis(to string) *Block { // like New(), but only for genesis block of ch
 		Transactions: []*transaction.Transaction{coinbase},
 	}
 
-	block.HashBlock([]byte{255})
+	block.HashBlock(255)
 
 	return block
 }

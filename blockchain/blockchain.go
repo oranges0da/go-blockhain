@@ -39,7 +39,7 @@ func New(address string) (*Blockchain, error) {
 
 	err = db.Update(func(txn *badger.Txn) error {
 		// create genesis block and convert it to byte array
-		block_genesis := block.Genesis()
+		block_genesis := block.Genesis("example address")
 		genesis := utils.ToByte(block_genesis)
 
 		err := txn.Set(block_genesis.Hash, genesis)

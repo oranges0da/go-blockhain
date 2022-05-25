@@ -1,6 +1,8 @@
 package blockchain
 
 import (
+	"fmt"
+
 	badger "github.com/dgraph-io/badger/v3"
 	"github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/utils"
@@ -27,10 +29,14 @@ func (iter *BlockchainIter) Next() *block.Block {
 		item, err := txn.Get(iter.currentHash)
 		utils.Handle(err)
 
-		encoded, err := item.Value()
+		fmt.Printf("Current block: %x\n", item)
 
 		return err
 	})
 
 	iter.currentHash = block.PrevHash
+
+	utils.Handle(err)
+
+	return block
 }
