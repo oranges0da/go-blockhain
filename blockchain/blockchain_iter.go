@@ -30,6 +30,7 @@ func (iter *BlockchainIter) Next() *block.Block {
 		utils.Handle(err)
 
 		err = item.Value(func(val []byte) error {
+			// copy value from badger db to valCopy(byte)
 			valCopy = append(valCopy, val...)
 
 			return nil
@@ -38,12 +39,14 @@ func (iter *BlockchainIter) Next() *block.Block {
 
 		blockCopy := utils.ToBlock(valCopy)
 
-		block = blockCopy
+		block = blockCopy // copy blockCopy(*block.Block) to block that is returned
 
 		return nil
 	})
-
 	utils.Handle(err)
+
+	// set hash to prevHash for next iteration
+	iter.currentHash = block.PrevHash
 
 	return block
 }
