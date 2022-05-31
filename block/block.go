@@ -29,7 +29,7 @@ func (b *Block) HashBlock(nonce int) error {
 	return err
 }
 
-func New(BlockId int, txs []*transaction.Transaction) *Block {
+func New(BlockId int, prevHash []byte, txs []*transaction.Transaction) *Block {
 	block := &Block{
 		PrevHash:     []byte{},
 		BlockID:      BlockId,
