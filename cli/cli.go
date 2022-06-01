@@ -1,21 +1,57 @@
 package cli
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	"os"
+
+	tea "github.com/charmbracelet/bubbletea"
+)
+
+type CommandLine struct{}
 
 type model struct {
-	Mode   string // mine or wallet mode
-	Cursor int
-	Wallet string // current wallet
+	Mode    string // wallet or mining mode
+	Cursor  int
+	Address string
+	Balance float32
 }
 
-func initialModel() model {
+func InitialModel() model {
 	return model{
-		Mode:   "wallet",
-		Cursor: 0,
+		Mode:    "",
+		Cursor:  0,
+		Address: "",
+		Balance: 0,
 	}
 }
 
-func (m *model) Init() *tea.Cmd {
-	m.Mode = "wallet"
-	m.Cursor = 0
+func (m model) Init() tea.Cmd {
+	return nil
+}
+
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "w":
+			return m, tea.Quit
+		}
+	}
+
+	return m, nil
+}
+
+func (m model) View() string {
+	return ""
+}
+
+func New() *CommandLine {
+	return &CommandLine{}
+}
+
+func (cli *CommandLine) Run() {
+	p := tea.NewProgram(InitialModel())
+
+	if err := p.Start(); err != nil {
+		os.Exit(1)
+	}
 }
