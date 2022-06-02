@@ -18,7 +18,8 @@ func New(BlockId int, prevHash []byte, txs []*transaction.Transaction) *model.Bl
 		Transactions: txs,
 	}
 
-	block.HashBlock() // 255 nonce for now
+	hash := HashBlock(block)
+	block.Hash = hash
 
 	return block
 }
@@ -33,7 +34,8 @@ func Genesis(to string) *model.Block { // like New(), but only for genesis block
 		Transactions: []*transaction.Transaction{coinbase},
 	}
 
-	hash := HashBlock
+	hash := HashBlock(block)
+	block.Hash = hash
 
 	return block
 }

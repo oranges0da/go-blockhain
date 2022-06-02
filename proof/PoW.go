@@ -13,11 +13,6 @@ import (
 
 const diff = 20
 
-type PoW struct {
-	Target *big.Int // hash target that should be reached with nonce
-	Block  *block.Block
-}
-
 func New(block *block.Block) *PoW {
 	target := big.NewInt(1)
 	target.Lsh(target, 256-diff) // make new hash target with difficulty
