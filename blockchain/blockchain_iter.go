@@ -37,10 +37,6 @@ func (iter *BlockchainIter) Next() *block.Block {
 		})
 		utils.Handle(err)
 
-		blockCopy := utils.ToBlock(valCopy)
-
-		block = blockCopy // copy blockCopy(*block.Block) to block that is returned
-
 		return nil
 	})
 	utils.Handle(err)
