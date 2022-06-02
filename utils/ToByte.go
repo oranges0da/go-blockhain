@@ -9,7 +9,7 @@ import (
 )
 
 // to data (such as block or int) to byte, for hashing, etc
-func ToByte[T *model.Block | []*transaction.Transaction | int64](data T) []byte {
+func ToByte[T *model.Block | []*transaction.Transaction | int](data T) []byte {
 	var buff bytes.Buffer
 
 	encoder := gob.NewEncoder(&buff)

@@ -30,10 +30,10 @@ func New(block *model.Block) *PoW {
 	return pow
 }
 
-func (pow *PoW) PrepareData(nonce int64) []byte {
+func (pow *PoW) PrepareData(nonce int) []byte {
 	blockData := [][]byte{
-		utils.ToByte(int64(pow.Block.BlockID)),
-		utils.ToByte(int64(pow.Block.Nonce)),
+		utils.ToByte(int(pow.Block.BlockID)),
+		utils.ToByte(int(pow.Block.Nonce)),
 		utils.ToByte(nonce),
 		utils.ToByte(pow.Block.Transactions),
 	}
@@ -43,9 +43,9 @@ func (pow *PoW) PrepareData(nonce int64) []byte {
 	return data
 }
 
-func (pow *PoW) Run() (int64, [32]byte) {
+func (pow *PoW) Run() (int, [32]byte) {
 	var hash [32]byte
-	var nonce int64 = 0
+	var nonce int = 0
 	var intHash big.Int
 
 	for nonce < math.MaxInt { // for every number in range run hash to find hash target
