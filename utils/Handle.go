@@ -4,6 +4,6 @@ import "log"
 
 func Handle(err error) {
 	if err != nil {
-		log.Fatalf("Error handler: %v", err)
+		log.Printf("Error handler: %v", err)
 	}
 }

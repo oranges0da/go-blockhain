@@ -1,6 +1,7 @@
 package blockchain
 
 import (
+	"fmt"
 	"log"
 	"runtime"
 
@@ -23,19 +24,19 @@ type Blockchain struct {
 
 // address that first transaction must take place
 func New(address string) (*Blockchain, error) {
-	if utils.DBExists() {
-		log.Println("Blockchain already exists")
-		runtime.Goexit() // do not create new blockchain if dbFile already exists
-	}
-
 	var lastHash []byte // hash of last block
+
+	if utils.DBExists() {
+		fmt.Println("Blockchain already exists")
+		runtime.Goexit()
+	}
 
 	opts := badger.DefaultOptions(dbPath)
 	opts.Dir = dbPath
-	opts.ValueDir = dbValue
 
 	db, err := badger.Open(opts)
 	utils.Handle(err)
+
 	defer db.Close()
 
 	err = db.Update(func(txn *badger.Txn) error {
@@ -66,11 +67,15 @@ func (chain *Blockchain) AddBlock(b *model.Block) error {
 
 	err := chain.Database.Update(func(txn *badger.Txn) error {
 		err := txn.Set(b.Hash, block)
-		utils.Handle(err)
+		log.Fatalf("Error adding block: %v", err)
 
 		err = txn.Set([]byte("lh"), b.Hash)
+		utils.Handle(err)
+		log.Printf("Block added to chain: %v\n", b)
+
 		return err
 	})
 
+	utils.Handle(err)
 	return err
 }
