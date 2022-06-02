@@ -13,6 +13,7 @@ import (
 func main() {
 	BlockChain, err := blockchain.New("example addrr")
 	utils.Handle(err)
+	log.Println("Created new blockchain, exited New()")
 
 	block := block.New(int(1), BlockChain.LastHash, []*transaction.Transaction{})
 	log.Printf("Creating block: %v", block)

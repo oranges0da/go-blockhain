@@ -11,7 +11,7 @@ import (
 	"github.com/oranges0da/goblockchain/utils"
 )
 
-const diff = 20
+const diff = 12
 
 type PoW struct {
 	Target *big.Int // hash target that should be reached with nonce
@@ -53,7 +53,8 @@ func (pow *PoW) Run() (int, [32]byte) {
 		testHash := sha256.Sum256(data)
 
 		intHash.SetBytes(testHash[:])
-		fmt.Printf("\r%x", testHash)
+		fmt.Printf("\r Trying hash: %x", testHash)
+		fmt.Printf("/r For block: %v", pow.Block)
 
 		if intHash.Cmp(pow.Target) == -1 {
 			fmt.Printf("\n")

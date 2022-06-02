@@ -3,7 +3,7 @@ package utils
 import "os"
 
 func DBExists() bool {
-	if _, err := os.Stat("tmp/blocks"); os.IsNotExist(err) {
+	if _, err := os.Stat("tmp/blocks/MANIFEST"); os.IsNotExist(err) {
 		return false
 	}
 
