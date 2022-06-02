@@ -7,8 +7,11 @@ import (
 )
 
 // first find nonce using proof of work, then return hash of final block
-func HashBlock(b *model.Block) []byte {
+func HashBlock(b *model.Block) [32]byte {
 	pow := proof.New(b)
+	_, hash := pow.Run()
+
+	return hash
 }
 
 func New(BlockId int, prevHash []byte, txs []*transaction.Transaction) *model.Block {
@@ -19,7 +22,7 @@ func New(BlockId int, prevHash []byte, txs []*transaction.Transaction) *model.Bl
 	}
 
 	hash := HashBlock(block)
-	block.Hash = hash
+	block.Hash = hash[:]
 
 	return block
 }
@@ -35,7 +38,7 @@ func Genesis(to string) *model.Block { // like New(), but only for genesis block
 	}
 
 	hash := HashBlock(block)
-	block.Hash = hash
+	block.Hash = hash[:]
 
 	return block
 }
