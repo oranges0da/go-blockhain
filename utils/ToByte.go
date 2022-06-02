@@ -3,10 +3,12 @@ package utils
 import (
 	"bytes"
 	"encoding/gob"
+
+	"github.com/oranges0da/goblockchain/model"
 )
 
 // to data (such as block or int) to byte, for hashing, etc
-func ToByte(data any) []byte {
+func ToByte[T *model.Block | int64](data T) []byte {
 	var buff bytes.Buffer
 
 	encoder := gob.NewEncoder(&buff)
