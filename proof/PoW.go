@@ -7,13 +7,18 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/utils"
 )
 
 const diff = 20
 
-func New(block *block.Block) *PoW {
+type PoW struct {
+	Target *big.Int // hash target that should be reached with nonce
+	Block  *model.Block
+}
+
+func New(block *model.Block) *PoW {
 	target := big.NewInt(1)
 	target.Lsh(target, 256-diff) // make new hash target with difficulty
 

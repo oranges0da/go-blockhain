@@ -2,7 +2,7 @@ package blockchain
 
 import (
 	badger "github.com/dgraph-io/badger/v3"
-	"github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/utils"
 )
 
@@ -20,8 +20,8 @@ func (chain *Blockchain) NewIter() *BlockchainIter {
 	return iter
 }
 
-func (iter *BlockchainIter) Next() *block.Block {
-	var block *block.Block
+func (iter *BlockchainIter) Next() *model.Block {
+	var block *model.Block
 
 	err := iter.DB.View(func(txn *badger.Txn) error {
 		var valCopy []byte

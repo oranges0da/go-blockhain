@@ -6,6 +6,7 @@ import (
 
 	badger "github.com/dgraph-io/badger/v3"
 	"github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/utils"
 )
 
@@ -60,7 +61,7 @@ func New(address string) (*Blockchain, error) {
 	return chain, err
 }
 
-func (chain *Blockchain) AddBlock(b *block.Block) error {
+func (chain *Blockchain) AddBlock(b *model.Block) error {
 	block := utils.ToByte(b)
 
 	err := chain.Database.Update(func(txn *badger.Txn) error {
