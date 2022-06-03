@@ -1,9 +1,12 @@
 package utils
 
-import "log"
+import (
+	"log"
+)
 
-func Handle(err error) {
+func Handle(err error, pkg string) {
 	if err != nil {
-		log.Printf("Error handler: %v", err)
+		log.Printf("Package: %v", pkg)
+		log.Printf("Handler: %v", err)
 	}
 }

@@ -15,7 +15,7 @@ func ToByte[T *model.Block | []*transaction.Transaction | int](data T) []byte {
 	encoder := gob.NewEncoder(&buff)
 	err := encoder.Encode(data)
 
-	Handle(err)
+	Handle(err, "ToByte")
 
 	return buff.Bytes()
 }

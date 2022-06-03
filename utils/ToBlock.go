@@ -14,7 +14,7 @@ func ToBlock(data []byte) *model.Block {
 
 	err := decoder.Decode(&block)
 
-	Handle(err)
+	Handle(err, "ToBlock")
 
 	return &block
 }

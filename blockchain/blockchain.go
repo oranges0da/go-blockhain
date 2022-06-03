@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	dbPath      = "./tmp/blocks"
+	dbPath      = "/tmp/blocks"
 	dbValue     = "tmp/blocks/MANIFEST"
 	genesisText = "Hello, this is the genesis block!"
 )
@@ -35,8 +35,7 @@ func New(address string) (*Blockchain, error) {
 	opts.Dir = dbPath
 
 	db, err := badger.Open(opts)
-	utils.Handle(err)
-
+	utils.Handle(err, "blockchain")
 	defer db.Close()
 
 	err = db.Update(func(txn *badger.Txn) error {
@@ -45,11 +44,11 @@ func New(address string) (*Blockchain, error) {
 		genesis := utils.ToByte(block_genesis)
 
 		err := txn.Set(block_genesis.Hash, genesis)
-		utils.Handle(err)
+		utils.Handle(err, "blockchain")
 
 		// set last hash to genesis hash
 		err = txn.Set([]byte("lh"), block_genesis.Hash)
-		utils.Handle(err)
+		utils.Handle(err, "blockchain")
 
 		return err
 	})
@@ -65,17 +64,28 @@ func New(address string) (*Blockchain, error) {
 func (chain *Blockchain) AddBlock(b *model.Block) error {
 	block := utils.ToByte(b)
 
-	err := chain.Database.Update(func(txn *badger.Txn) error {
+	// open database again
+	db, err := badger.Open(badger.DefaultOptions(dbPath))
+	utils.Handle(err, "blockchain")
+
+	err = db.Update(func(txn *badger.Txn) error {
 		err := txn.Set(b.Hash, block)
-		log.Fatalf("Error adding block: %v", err)
+		if err != nil {
+			log.Printf("(blockchain) Error adding block: %v", err)
+		}
 
 		err = txn.Set([]byte("lh"), b.Hash)
-		utils.Handle(err)
+		utils.Handle(err, "blockchain")
 		log.Printf("Block added to chain: %v\n", b)
 
 		return err
 	})
 
-	utils.Handle(err)
+	chain.LastHash = b.Hash
+
+	if err != nil {
+		log.Printf("Error with badger whilst adding block: %v", err)
+	}
+
 	return err
 }

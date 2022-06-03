@@ -1,6 +1,8 @@
 package blockchain
 
 import (
+	"log"
+
 	badger "github.com/dgraph-io/badger/v3"
 	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/utils"
@@ -27,7 +29,9 @@ func (iter *BlockchainIter) Next() *model.Block {
 		var valCopy []byte
 
 		item, err := txn.Get(iter.CurrentHash)
-		utils.Handle(err)
+		if err != nil {
+			log.Printf("Item error in blockchain iter: %v", err)
+		}
 
 		err = item.Value(func(val []byte) error {
 			// copy value from badger db to valCopy(byte)
@@ -35,11 +39,11 @@ func (iter *BlockchainIter) Next() *model.Block {
 
 			return nil
 		})
-		utils.Handle(err)
+		utils.Handle(err, "iter")
 
 		return nil
 	})
-	utils.Handle(err)
+	utils.Handle(err, "iter")
 
 	// set hash to prevHash for next iteration
 	iter.CurrentHash = block.PrevHash
