@@ -1,16 +1,15 @@
 package utils
 
-import "github.com/dgraph-io/badger"
+import "github.com/xujiajun/nutsdb"
 
-func OpenDB() (*badger.DB, error) {
-	opts := badger.DefaultOptions("/tmp/blocks")
-	opts.Dir = "/tmp/blocks"
-	opts.ValueDir = "/tmp/blocks/MANIFEST"
-	opts.Logger = nil
+func OpenDB() (*nutsdb.DB, error) {
+	opts := nutsdb.DefaultOptions
+	opts.Dir = "tmp/blocks"
 
-	if db, err := badger.Open(opts); err != nil {
+	db, err := nutsdb.Open(opts)
+
+	if err != nil {
 		return nil, err
-	} else {
-		return db, nil
 	}
+	return db, nil
 }
