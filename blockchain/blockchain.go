@@ -2,13 +2,10 @@ package blockchain
 
 import (
 	"fmt"
-	"log"
 	"runtime"
 
-	badger "github.com/dgraph-io/badger/v3"
-	"github.com/oranges0da/goblockchain/block"
-	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/utils"
+	"github.com/xujiajun/nutsdb"
 )
 
 const (
@@ -18,73 +15,25 @@ const (
 )
 
 type Blockchain struct {
-	LastHash []byte
-	Database *badger.DB
+	LastHash [32]byte
+	Database *nutsdb.DB
 }
 
 // address that first transaction must take place
 func New(address string) (*Blockchain, error) {
-	var lastHash []byte // hash of last block
+	var lastHash [32]byte // hash of last block
 
 	if utils.DBExists() {
 		fmt.Println("Blockchain already exists")
 		runtime.Goexit()
 	}
 
-	opts := badger.DefaultOptions(dbPath)
-	opts.Dir = dbPath
-	opts.Logger = nil
+	db, err := utils.OpenDB()
 
-	db, err := badger.Open(opts)
-	utils.Handle(err, "blockchain")
-
-	err = db.Update(func(txn *badger.Txn) error {
-		// create genesis block and convert it to byte array
-		block_genesis := block.Genesis("example address")
-		genesis := utils.ToByte(block_genesis)
-
-		err := txn.Set(block_genesis.Hash, genesis)
-		utils.Handle(err, "blockchain")
-
-		// set last hash to genesis hash
-		err = txn.Set([]byte("lh"), block_genesis.Hash)
-		utils.Handle(err, "blockchain")
-
-		return err
-	})
-
-	chain := &Blockchain{
+	blockchain := &Blockchain{
 		LastHash: lastHash,
 		Database: db,
 	}
 
-	return chain, err
-}
-
-func (chain *Blockchain) AddBlock(b *model.Block) error {
-	block := utils.ToByte(b)
-
-	err := chain.Database.Update(func(txn *badger.Txn) error {
-		err := txn.Set(b.Hash, block)
-		if err != nil {
-			log.Printf("(blockchain) Error adding block: %v", err)
-		}
-
-		err = txn.Set([]byte("lh"), b.Hash)
-		utils.Handle(err, "blockchain")
-
-		if err == nil {
-			log.Printf("Block added to blockchain: %v", b)
-		}
-
-		return err
-	})
-
-	chain.LastHash = b.Hash
-
-	if err != nil {
-		log.Printf("Error with badger whilst adding block: %v", err)
-	}
-
-	return err
+	return blockchain, err
 }
