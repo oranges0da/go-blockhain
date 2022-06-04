@@ -8,10 +8,9 @@ func OpenDB() (*badger.DB, error) {
 	opts.ValueDir = "/tmp/blocks/MANIFEST"
 	opts.Logger = nil
 
-	if !DBExists() {
-		db, err := badger.Open(opts)
-		Handle(err, "OpenDB")
-
-		return db, err
+	if db, err := badger.Open(opts); err != nil {
+		return nil, err
+	} else {
+		return db, nil
 	}
 }
