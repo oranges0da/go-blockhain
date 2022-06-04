@@ -25,7 +25,10 @@ func (chain *Blockchain) NewIter() *BlockchainIter {
 func (iter *BlockchainIter) Next() *model.Block {
 	var block *model.Block
 
-	err := iter.DB.View(func(txn *badger.Txn) error {
+	db, err := badger.Open(badger.DefaultOptions("/tmp/blocks"))
+	utils.Handle(err, "iter")
+
+	err = db.View(func(txn *badger.Txn) error {
 		var valCopy []byte
 
 		item, err := txn.Get(iter.CurrentHash)

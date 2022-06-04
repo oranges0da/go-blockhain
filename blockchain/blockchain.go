@@ -33,10 +33,10 @@ func New(address string) (*Blockchain, error) {
 
 	opts := badger.DefaultOptions(dbPath)
 	opts.Dir = dbPath
+	opts.Logger = nil
 
 	db, err := badger.Open(opts)
 	utils.Handle(err, "blockchain")
-	defer db.Close()
 
 	err = db.Update(func(txn *badger.Txn) error {
 		// create genesis block and convert it to byte array
@@ -64,11 +64,7 @@ func New(address string) (*Blockchain, error) {
 func (chain *Blockchain) AddBlock(b *model.Block) error {
 	block := utils.ToByte(b)
 
-	// open database again
-	db, err := badger.Open(badger.DefaultOptions(dbPath))
-	utils.Handle(err, "blockchain")
-
-	err = db.Update(func(txn *badger.Txn) error {
+	err := chain.Database.Update(func(txn *badger.Txn) error {
 		err := txn.Set(b.Hash, block)
 		if err != nil {
 			log.Printf("(blockchain) Error adding block: %v", err)
@@ -76,7 +72,10 @@ func (chain *Blockchain) AddBlock(b *model.Block) error {
 
 		err = txn.Set([]byte("lh"), b.Hash)
 		utils.Handle(err, "blockchain")
-		log.Printf("Block added to chain: %v\n", b)
+
+		if err == nil {
+			log.Printf("Block added to blockchain: %v", b)
+		}
 
 		return err
 	})

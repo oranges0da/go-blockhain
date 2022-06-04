@@ -6,7 +6,6 @@ import (
 
 func Handle(err error, pkg string) {
 	if err != nil {
-		log.Printf("Package: %v", pkg)
-		log.Printf("Handler: %v", err)
+		log.Printf("Package: %v \n Handler:%v ", pkg, err)
 	}
 }
