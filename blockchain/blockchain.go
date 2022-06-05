@@ -74,24 +74,3 @@ func (chain *Blockchain) AddBlock(block *model.Block) error {
 
 	return err
 }
-
-func GetBlocks() ([]*model.Block, error) {
-	var blocks []*model.Block
-
-	db, err := utils.OpenDB()
-	utils.Handle(err, "Error opening database (block)")
-	defer db.Close()
-
-	err = db.View(func(tx *nutsdb.Tx) error {
-		entries, err := tx.GetAll("root")
-		utils.Handle(err, "Error getting all entries from db (block)")
-
-		for _, entry := range entries {
-			blocks = append(blocks, utils.ToBlock(entry.Value))
-		}
-
-		return nil
-	})
-
-	return blocks, err
-}

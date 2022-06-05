@@ -28,14 +28,18 @@ func New(BlockId int, prevHash []byte, txs []*transaction.Transaction) *model.Bl
 	return block
 }
 
-func Genesis(to string) *model.Block { // like New(), but only for genesis block of chain
+// like New() but only for genesis block, to param is the address the reward will be sent to
+func Genesis(to string) *model.Block {
+	var transactions []*transaction.Transaction
+
 	coinbase := transaction.NewCoinbase(to, "example sig")
+	transactions = append(transactions, coinbase)
 
 	block := &model.Block{
 		PrevHash:     []byte("0"),
 		BlockID:      0,
 		Nonce:        0,
-		Transactions: []*transaction.Transaction{coinbase},
+		Transactions: transactions,
 	}
 
 	nonce, hash := HashBlock(block)
