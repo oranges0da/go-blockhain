@@ -5,6 +5,7 @@ import (
 	"runtime"
 
 	"github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/utils"
 	"github.com/xujiajun/nutsdb"
 )
@@ -17,8 +18,8 @@ const (
 )
 
 type Blockchain struct {
-	LastHash []byte
-	Database *nutsdb.DB
+	LastHash    []byte
+	BlockHeight int
 }
 
 // address that first transaction must take place
@@ -40,16 +41,36 @@ func New(address string) (*Blockchain, error) {
 		byte_genesis := utils.ToByte(genesis)
 
 		//write genesis block to db
-		if err := tx.Put(bucket, genesis.Hash, byte_genesis, 0); err != nil {
-			utils.Handle(err, "blockchain")
-		}
+		err := tx.Put(bucket, genesis.Hash, byte_genesis, 0)
+
+		return err
 	})
 	utils.Handle(err, "blockchain")
 
+	// return blockchain with the genesis hash
 	blockchain := &Blockchain{
-		LastHash: genesis.Hash,
-		Database: db,
+		LastHash:    genesis.Hash,
+		BlockHeight: 0,
 	}
 
 	return blockchain, err
+}
+
+func (chain *Blockchain) AddBlock(block *model.Block) error {
+	// serialize block
+	byte_block := utils.ToByte(block)
+
+	// open db
+	db, err := utils.OpenDB()
+
+	// add block to db, with its hash as key
+	err = db.Update(func(tx *nutsdb.Tx) error {
+		if err := tx.Put("root", block.Hash, byte_block, 0); err != nil {
+			utils.Handle(err, "blockchain")
+		}
+
+		return nil
+	})
+
+	return err
 }

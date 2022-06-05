@@ -23,17 +23,7 @@ func main() {
 
 	BlockChain.AddBlock(block)
 
-	iter := BlockChain.NewIter()
-
-	for { // loop through blockchain, break when no prevHash exists(at genesis)
-		block = iter.Next()
-
-		fmt.Printf("block: %v\n", block)
-
-		if block.PrevHash == nil {
-			break
-		}
-	}
-
-	fmt.Println("Broke out of for loop in main")
+	fmt.Printf("Block: %v", block)
+	fmt.Printf("Blockchain: %v", BlockChain)
+	fmt.Printf("Block Height: %v \n", BlockChain.BlockHeight)
 }

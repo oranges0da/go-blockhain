@@ -32,7 +32,7 @@ func Genesis(to string) *model.Block { // like New(), but only for genesis block
 	coinbase := transaction.NewCoinbase(to, "example sig")
 
 	block := &model.Block{
-		PrevHash:     []byte{},
+		PrevHash:     []byte("0"),
 		BlockID:      0,
 		Nonce:        0,
 		Transactions: []*transaction.Transaction{coinbase},
