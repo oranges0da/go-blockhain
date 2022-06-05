@@ -24,7 +24,7 @@ func main() {
 
 	BlockChain.AddBlock(block)
 
-	blocks, err := blockchain.GetBlocks()
+	blocks, err := utils.GetBlocks()
 	utils.Handle(err, "main")
 
 	for _, b := range blocks {
