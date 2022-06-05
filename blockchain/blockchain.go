@@ -17,7 +17,7 @@ const (
 )
 
 type Blockchain struct {
-	LastHash [32]byte
+	LastHash []byte
 	Database *nutsdb.DB
 }
 

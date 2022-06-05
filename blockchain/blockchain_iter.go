@@ -3,7 +3,7 @@ package blockchain
 import "github.com/xujiajun/nutsdb"
 
 type BlockchainIter struct {
-	CurrentHash [32]byte
+	CurrentHash []byte
 	DB          *nutsdb.DB
 }
 

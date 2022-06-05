@@ -7,23 +7,23 @@ import (
 )
 
 // first find nonce using proof of work, then return hash of final block
-func HashBlock(b *model.Block) (int, [32]byte) {
+func HashBlock(b *model.Block) (int, []byte) {
 	pow := proof.New(b)
 	nonce, hash := pow.Run()
 
-	return nonce, hash
+	return nonce, hash[:]
 }
 
 func New(BlockId int, prevHash []byte, txs []*transaction.Transaction) *model.Block {
 	block := &model.Block{
 		BlockID:      BlockId,
-		PrevHash:     [32]byte{},
+		PrevHash:     []byte{},
 		Transactions: txs,
 	}
 
 	nonce, hash := HashBlock(block)
 	block.Nonce = nonce
-	block.Hash = hash
+	block.Hash = hash[:]
 
 	return block
 }
@@ -32,7 +32,7 @@ func Genesis(to string) *model.Block { // like New(), but only for genesis block
 	coinbase := transaction.NewCoinbase(to, "example sig")
 
 	block := &model.Block{
-		PrevHash:     [32]byte{0},
+		PrevHash:     []byte{},
 		BlockID:      0,
 		Nonce:        0,
 		Transactions: []*transaction.Transaction{coinbase},
@@ -40,7 +40,7 @@ func Genesis(to string) *model.Block { // like New(), but only for genesis block
 
 	nonce, hash := HashBlock(block)
 	block.Nonce = nonce
-	block.Hash = hash
+	block.Hash = hash[:]
 
 	return block
 }
