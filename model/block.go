@@ -4,8 +4,8 @@ import "github.com/oranges0da/goblockchain/transaction"
 
 type Block struct {
 	BlockID      int
-	PrevHash     []byte
+	PrevHash     [32]byte
 	Nonce        int
 	Transactions []*transaction.Transaction
-	Hash         []byte
+	Hash         [32]byte
 }

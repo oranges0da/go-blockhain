@@ -17,13 +17,13 @@ func HashBlock(b *model.Block) (int, [32]byte) {
 func New(BlockId int, prevHash []byte, txs []*transaction.Transaction) *model.Block {
 	block := &model.Block{
 		BlockID:      BlockId,
-		PrevHash:     []byte{},
+		PrevHash:     [32]byte{},
 		Transactions: txs,
 	}
 
 	nonce, hash := HashBlock(block)
 	block.Nonce = nonce
-	block.Hash = hash[:]
+	block.Hash = hash
 
 	return block
 }
@@ -32,7 +32,7 @@ func Genesis(to string) *model.Block { // like New(), but only for genesis block
 	coinbase := transaction.NewCoinbase(to, "example sig")
 
 	block := &model.Block{
-		PrevHash:     []byte{0},
+		PrevHash:     [32]byte{0},
 		BlockID:      0,
 		Nonce:        0,
 		Transactions: []*transaction.Transaction{coinbase},
@@ -40,7 +40,7 @@ func Genesis(to string) *model.Block { // like New(), but only for genesis block
 
 	nonce, hash := HashBlock(block)
 	block.Nonce = nonce
-	block.Hash = hash[:]
+	block.Hash = hash
 
 	return block
 }
