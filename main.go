@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/oranges0da/goblockchain/block"
+	block "github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/blockchain"
 	"github.com/oranges0da/goblockchain/transaction"
+	"github.com/oranges0da/goblockchain/utils"
 )
 
 func main() {
@@ -23,7 +24,10 @@ func main() {
 
 	BlockChain.AddBlock(block)
 
-	fmt.Printf("Block: %v", block)
-	fmt.Printf("Blockchain: %v", BlockChain)
-	fmt.Printf("Block Height: %v \n", BlockChain.BlockHeight)
+	blocks, err := blockchain.GetBlocks()
+	utils.Handle(err, "main")
+
+	for _, b := range blocks {
+		fmt.Printf("Block: %v\n", b)
+	}
 }

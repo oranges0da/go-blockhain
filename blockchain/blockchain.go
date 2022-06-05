@@ -36,10 +36,11 @@ func New(address string) (*Blockchain, error) {
 
 	err = db.Update(func(tx *nutsdb.Tx) error {
 		// serialize genesis block
+		genesis_id := utils.ToByte(genesis.BlockID)
 		byte_genesis := utils.ToByte(genesis)
 
 		//write genesis block to db
-		err := tx.Put(bucket, genesis.Hash, byte_genesis, 0)
+		err := tx.Put(bucket, genesis_id, byte_genesis, 0)
 
 		return err
 	})
@@ -64,7 +65,7 @@ func (chain *Blockchain) AddBlock(block *model.Block) error {
 
 	// add block to db, with its hash as key
 	err = db.Update(func(tx *nutsdb.Tx) error {
-		if err := tx.Put("root", block.Hash, byte_block, 0); err != nil {
+		if err := tx.Put("root", block.Hash, byte_block, 1); err != nil {
 			utils.Handle(err, "blockchain")
 		}
 
@@ -72,4 +73,25 @@ func (chain *Blockchain) AddBlock(block *model.Block) error {
 	})
 
 	return err
+}
+
+func GetBlocks() ([]*model.Block, error) {
+	var blocks []*model.Block
+
+	db, err := utils.OpenDB()
+	utils.Handle(err, "Error opening database (block)")
+	defer db.Close()
+
+	err = db.View(func(tx *nutsdb.Tx) error {
+		entries, err := tx.GetAll("root")
+		utils.Handle(err, "Error getting all entries from db (block)")
+
+		for _, entry := range entries {
+			blocks = append(blocks, utils.ToBlock(entry.Value))
+		}
+
+		return nil
+	})
+
+	return blocks, err
 }
