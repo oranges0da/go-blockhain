@@ -12,8 +12,6 @@ import (
 
 const (
 	bucket      = "root"
-	dbPath      = "/tmp/blocks"
-	dbValue     = "tmp/blocks/MANIFEST"
 	genesisText = "Hello, this is the genesis block!"
 )
 
@@ -62,6 +60,7 @@ func (chain *Blockchain) AddBlock(block *model.Block) error {
 
 	// open db
 	db, err := utils.OpenDB()
+	utils.Handle(err, "blockchain")
 
 	// add block to db, with its hash as key
 	err = db.Update(func(tx *nutsdb.Tx) error {
