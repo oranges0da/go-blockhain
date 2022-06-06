@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/oranges0da/goblockchain/block"
+	block "github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/utils"
 	"github.com/xujiajun/nutsdb"
@@ -56,6 +56,10 @@ func New(address string) (*Blockchain, error) {
 }
 
 func (chain *Blockchain) AddBlock(block *model.Block) error {
+	// set lastHash to block hash and increment blockHeight
+	chain.LastHash = block.Hash
+	chain.BlockHeight = chain.BlockHeight + 1
+
 	// serialize block
 	byte_block := utils.ToByte(block)
 

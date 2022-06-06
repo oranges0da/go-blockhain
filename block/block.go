@@ -14,16 +14,12 @@ func HashBlock(b *model.Block) (int, []byte) {
 	return nonce, hash[:]
 }
 
-func New(BlockId int, prevHash []byte, txs []*transaction.Transaction) *model.Block {
+func New(blockID int, prevHash []byte, txs []*transaction.Transaction) *model.Block {
 	block := &model.Block{
-		BlockID:      BlockId,
-		PrevHash:     []byte{},
+		BlockID:      blockID,
+		PrevHash:     prevHash,
 		Transactions: txs,
 	}
-
-	nonce, hash := HashBlock(block)
-	block.Nonce = nonce
-	block.Hash = hash[:]
 
 	return block
 }

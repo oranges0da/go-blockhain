@@ -11,7 +11,7 @@ type Transaction struct {
 	ID       []byte // hash of transaction
 	In       []TxInput
 	Out      []TxOutput
-	Locktime int64
+	Locktime int
 }
 
 type TxInput struct {
@@ -21,7 +21,7 @@ type TxInput struct {
 }
 
 type TxOutput struct {
-	Value  float64
+	Value  float32
 	PubKey string // receiver's public key/address
 }
 
@@ -54,4 +54,8 @@ func NewCoinbase(to string, sig string) *Transaction {
 	tx.HashTx()
 
 	return tx
+}
+
+func (tx *Transaction) IsCoinbase() bool {
+	return len(tx.In) == 1 && tx.In[0].Out == -1
 }
