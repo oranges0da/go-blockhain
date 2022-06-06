@@ -59,3 +59,11 @@ func NewCoinbase(to string, sig string) *Transaction {
 func (tx *Transaction) IsCoinbase() bool {
 	return len(tx.In) == 1 && tx.In[0].Out == -1
 }
+
+func (in *TxInput) CanUnlockInput(data string) bool {
+	return in.Sig == data
+}
+
+func (out *TxOutput) CanBeUnlocked(data string) bool {
+	return out.PubKey == data
+}
