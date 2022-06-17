@@ -21,7 +21,7 @@ type TxInput struct {
 }
 
 type TxOutput struct {
-	Value  float32
+	Value  int    // amt of satoshis in output (amt that is being sent)
 	PubKey string // receiver's public key/address
 }
 
@@ -40,7 +40,7 @@ func (tx *Transaction) HashTx() {
 	tx.ID = hash[:]
 }
 
-func NewCoinbase(to string, sig string) *Transaction {
+func NewCoinbase(addr string, sig string) *Transaction {
 	tx := &Transaction{
 		ID:       []byte{},
 		In:       []TxInput{},
@@ -49,7 +49,7 @@ func NewCoinbase(to string, sig string) *Transaction {
 	}
 
 	tx.In = append(tx.In, TxInput{Sig: sig, Out: -1})
-	tx.Out = append(tx.Out, TxOutput{Value: 50, PubKey: to})
+	tx.Out = append(tx.Out, TxOutput{Value: 50, PubKey: addr})
 
 	tx.HashTx()
 
