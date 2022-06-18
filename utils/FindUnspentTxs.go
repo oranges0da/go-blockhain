@@ -35,7 +35,7 @@ func FindUnspentTxs(addr string) []transaction.Transaction {
 				for _, in := range tx.Inputs {
 					if in.InCanUnlock(addr) {
 						inTxId := hex.EncodeToString(in.ID)
-						spentTxs[inTxId] = append(spentTxs[inTxId], in.Out)
+						spentTxs[inTxId] = append(spentTxs[inTxId], in.Vout)
 					}
 				}
 			}

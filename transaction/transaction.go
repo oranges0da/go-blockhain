@@ -15,9 +15,9 @@ type Transaction struct {
 }
 
 type TxInput struct {
-	ID  []byte // hash of transaction that is being spent/consumed
-	Sig string
-	Out int // db index location of output of transaction
+	ID   []byte // hash of transaction that is being spent/consumed
+	Vout int    // index of output in transaction that is being spent
+	Sig  string
 }
 
 type TxOutput struct {
@@ -48,7 +48,7 @@ func NewCoinbase(addr string, sig string) *Transaction {
 		Locktime: 0,
 	}
 
-	tx.Inputs = append(tx.Inputs, TxInput{Sig: sig, Out: -1})
+	tx.Inputs = append(tx.Inputs, TxInput{Sig: sig, Vout: -1})
 	tx.Outputs = append(tx.Outputs, TxOutput{Value: 50, PubKey: addr})
 
 	tx.HashTx()
@@ -57,7 +57,7 @@ func NewCoinbase(addr string, sig string) *Transaction {
 }
 
 func (tx *Transaction) IsCoinbase() bool {
-	return len(tx.Inputs) == 1 && tx.Inputs[0].Out == -1
+	return len(tx.Inputs) == 1 && tx.Inputs[0].Vout == -1
 }
 
 func (in *TxInput) InCanUnlock(data string) bool {
