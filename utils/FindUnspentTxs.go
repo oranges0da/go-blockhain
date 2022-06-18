@@ -18,14 +18,28 @@ func FindUnspentTxs(addr string) []transaction.Transaction {
 		for _, tx := range block.Transactions {
 			txId := hex.EncodeToString(tx.ID)
 
+			if !tx.IsCoinbase() {
+				for _, in := range tx.Inputs {
+					// if tx is not coinbase, and tx belongs to the address, add it to spendTxs
+					if in.InCanUnlock(addr) {
+						spentTxs[txId] = append(spentTxs[txId], in.Out)
+					}
+				}
+			}
 		Outputs:
 			for outIdx, out := range tx.Outputs {
 				if spentTxs[txId] != nil {
-					if spentTxs[txID] == outIdx {
-						continue Outputs
+					for _, spentOut := range spentTxs[txId] {
+						if spentOut == outIdx {
+							continue Outputs
+						}
 					}
+				}
+				if out.OutCanUnlock(addr) {
+					unspentTxs = append(unspentTxs, *tx)
 				}
 			}
 		}
 	}
+	return unspentTxs
 }

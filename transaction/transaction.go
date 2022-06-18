@@ -21,7 +21,7 @@ type TxInput struct {
 }
 
 type TxOutput struct {
-	Value  int    // amt of satoshis in output (amt that is being sent)
+	Value  int    // amt of satoshis that is being "sent"
 	PubKey string // receiver's public key/address
 }
 
@@ -60,10 +60,10 @@ func (tx *Transaction) IsCoinbase() bool {
 	return len(tx.Inputs) == 1 && tx.Inputs[0].Out == -1
 }
 
-func (in *TxInput) CanUnlockInput(data string) bool {
+func (in *TxInput) InCanUnlock(data string) bool {
 	return in.Sig == data
 }
 
-func (out *TxOutput) CanBeUnlocked(data string) bool {
+func (out *TxOutput) OutCanUnlock(data string) bool {
 	return out.PubKey == data
 }
