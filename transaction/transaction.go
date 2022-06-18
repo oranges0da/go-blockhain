@@ -9,8 +9,8 @@ import (
 
 type Transaction struct {
 	ID       []byte // hash of transaction
-	In       []TxInput
-	Out      []TxOutput
+	Inputs   []TxInput
+	Outputs  []TxOutput
 	Locktime int
 }
 
@@ -43,13 +43,13 @@ func (tx *Transaction) HashTx() {
 func NewCoinbase(addr string, sig string) *Transaction {
 	tx := &Transaction{
 		ID:       []byte{},
-		In:       []TxInput{},
-		Out:      []TxOutput{},
+		Inputs:   []TxInput{},
+		Outputs:  []TxOutput{},
 		Locktime: 0,
 	}
 
-	tx.In = append(tx.In, TxInput{Sig: sig, Out: -1})
-	tx.Out = append(tx.Out, TxOutput{Value: 50, PubKey: addr})
+	tx.Inputs = append(tx.Inputs, TxInput{Sig: sig, Out: -1})
+	tx.Outputs = append(tx.Outputs, TxOutput{Value: 50, PubKey: addr})
 
 	tx.HashTx()
 
@@ -57,7 +57,7 @@ func NewCoinbase(addr string, sig string) *Transaction {
 }
 
 func (tx *Transaction) IsCoinbase() bool {
-	return len(tx.In) == 1 && tx.In[0].Out == -1
+	return len(tx.Inputs) == 1 && tx.Inputs[0].Out == -1
 }
 
 func (in *TxInput) CanUnlockInput(data string) bool {
