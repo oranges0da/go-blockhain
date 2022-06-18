@@ -15,7 +15,7 @@ type Transaction struct {
 }
 
 type TxInput struct {
-	ID  []byte // id of transaction pointing to correlated output in badger db
+	ID  []byte // hash of transaction that is being spent/consumed
 	Sig string
 	Out int // db index location of output of transaction
 }
