@@ -5,6 +5,7 @@ import (
 	"crypto/elliptic"
 	"encoding/gob"
 	"io/ioutil"
+	"os"
 
 	"github.com/oranges0da/goblockchain/utils"
 )
@@ -45,4 +46,29 @@ func (ws *Wallets) Save() {
 
 	err = ioutil.WriteFile(walletFile, content.Bytes(), 0644)
 	utils.Handle(err, "Problem saving wallets.")
+}
+
+func (ws *Wallets) Load() error {
+	if _, err := os.Stat(walletFile); os.IsNotExist(err) {
+		return err
+	}
+
+	var wallets Wallets
+
+	fileContent, err := ioutil.ReadFile(walletFile)
+	if err != nil {
+		return err
+	}
+
+	gob.Register(elliptic.P256())
+
+	decoder := gob.NewDecoder(bytes.NewReader(fileContent))
+	err = decoder.Decode(&wallets)
+	if err != nil {
+		return err
+	}
+
+	ws.Wallets = wallets.Wallets
+
+	return nil
 }
