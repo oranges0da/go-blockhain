@@ -8,7 +8,6 @@ import (
 
 	"github.com/mr-tron/base58"
 	"github.com/oranges0da/goblockchain/utils"
-	"golang.org/x/crypto/ripemd160"
 )
 
 const (
@@ -24,11 +23,14 @@ type Wallet struct {
 
 func New() *Wallet {
 	privKey, pubKey := NewKeyPair()
-	wallet := Wallet{privKey, pubKey, "", 0}
-	return &wallet
+	wallet := &Wallet{privKey, pubKey, "", 0}
+	wallet.Address = wallet.NewAddress()
+
+	return wallet
 }
 
-func (w Wallet) NewAddress() []byte {
+// get address in base58 format from public key
+func (w Wallet) NewAddress() string {
 	pubHash := HashPubKey(w.PubKey)
 
 	versionedHash := append([]byte{version}, pubHash...)
@@ -37,6 +39,8 @@ func (w Wallet) NewAddress() []byte {
 	fullHash := append(versionedHash, checkSum...)
 
 	address := base58.Encode(fullHash)
+
+	return address
 }
 
 // generate new private and public keys
@@ -51,17 +55,13 @@ func NewKeyPair() (ecdsa.PrivateKey, []byte) {
 }
 
 func HashPubKey(pubKey []byte) []byte {
-	hash := sha256.Sum256(pubKey)
+	firstHash := sha256.Sum256(pubKey)
+	finalHash := sha256.Sum256(firstHash[:])
 
-	hasher := ripemd160.New()
-	_, err := hasher.Write(hash[:])
-	utils.Handle(err, "Problem hashing public key into address.")
-
-	pubKeyHash := hasher.Sum(nil)
-
-	return pubKeyHash
+	return finalHash[:]
 }
 
+// get 4-byte long checksum from pubHash
 func CheckSum(hash []byte) []byte {
 	first := sha256.Sum256(hash)
 	second := sha256.Sum256(first[:])
