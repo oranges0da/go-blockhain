@@ -30,7 +30,7 @@ func New() *Wallet {
 }
 
 // get address in base58 format from public key
-func (w Wallet) NewAddress() string {
+func (w *Wallet) NewAddress() string {
 	pubHash := HashPubKey(w.PubKey)
 
 	versionedHash := append([]byte{version}, pubHash...)
