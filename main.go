@@ -22,8 +22,6 @@ func main() {
 	block := block.New(int(1), BlockChain.LastHash, []*transaction.Transaction{})
 	log.Printf("Creating block: %v", block)
 
-	BlockChain.AddBlock(block)
-
 	blocks, err := utils.GetBlocks()
 	utils.Handle(err, "main")
 
