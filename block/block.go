@@ -14,11 +14,11 @@ func HashBlock(b *model.Block) (int, []byte) {
 	return nonce, hash[:]
 }
 
-func New(blockID int, prevHash []byte, txs []*transaction.Transaction) *model.Block {
+func New(blockID int, prevHash []byte, tx *transaction.Transaction) *model.Block {
 	block := &model.Block{
-		BlockID:      blockID,
-		PrevHash:     prevHash,
-		Transactions: txs,
+		BlockID:     blockID,
+		PrevHash:    prevHash,
+		Transaction: tx,
 	}
 
 	return block
@@ -26,16 +26,13 @@ func New(blockID int, prevHash []byte, txs []*transaction.Transaction) *model.Bl
 
 // like New() but only for genesis block, to param is the address the reward will be sent to
 func Genesis(addr string) *model.Block {
-	var transactions []*transaction.Transaction
-
 	coinbase := transaction.NewCoinbase(addr, "example sig")
-	transactions = append(transactions, coinbase)
 
 	block := &model.Block{
-		PrevHash:     []byte("0"),
-		BlockID:      0,
-		Nonce:        0,
-		Transactions: transactions,
+		PrevHash:    []byte("0"),
+		BlockID:     0,
+		Nonce:       0,
+		Transaction: coinbase,
 	}
 
 	nonce, hash := HashBlock(block)

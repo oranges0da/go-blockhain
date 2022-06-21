@@ -55,8 +55,8 @@ func New(address string) (*Blockchain, error) {
 	return blockchain, err
 }
 
-func (chain *Blockchain) AddBlock(txs []*transaction.Transaction) error {
-	block := block.New(chain.BlockHeight+1, chain.LastHash, txs)
+func (chain *Blockchain) AddBlock(tx *transaction.Transaction) error {
+	block := block.New(chain.BlockHeight+1, chain.LastHash, tx)
 
 	// set lastHash to block hash and increment blockHeight
 	chain.LastHash = block.Hash

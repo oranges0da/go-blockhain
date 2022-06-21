@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	block "github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/blockchain"
-	"github.com/oranges0da/goblockchain/transaction"
 	"github.com/oranges0da/goblockchain/utils"
 )
 
@@ -18,9 +16,7 @@ func main() {
 	}
 
 	log.Println("Created new blockchain, exited New()")
-
-	block := block.New(int(1), BlockChain.LastHash, []*transaction.Transaction{})
-	log.Printf("Creating block: %v", block)
+	log.Printf("Created blockchain :%x", BlockChain)
 
 	blocks, err := utils.GetBlocks()
 	utils.Handle(err, "main")
