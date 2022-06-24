@@ -35,7 +35,22 @@ func (out *TxOutput) OutCanUnlock(addr string) bool {
 		panic(err)
 	}
 
-	pubKeyHash := pubKeyData[2 : len(pubKeyData)-4] // remove version number and checksum to just get the hash
+	pubKeyHash := pubKeyData[1 : len(pubKeyData)-4] // remove version number and checksum to just get the hash
 
+	return bytes.Equal(out.PubKeyHash, pubKeyHash)
+}
+
+func (out *TxOutput) Lock(addr string) {
+	pubKeyData, err := base58.Decode(addr)
+	if err != nil {
+		panic(err)
+	}
+
+	pubKeyHash := pubKeyData[1 : len(pubKeyData)-4] // remove version number and checksum to just get the hash
+
+	out.PubKeyHash = pubKeyHash
+}
+
+func (out *TxOutput) IsOutLocked(pubKeyHash []byte) bool {
 	return bytes.Equal(out.PubKeyHash, pubKeyHash)
 }
