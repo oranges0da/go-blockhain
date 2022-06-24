@@ -35,7 +35,7 @@ func ValidateAddress(addr string) bool {
 	decoded, err := base58.Decode(addr)
 	utils.Handle(err, "Error decoding addres whilst validating.")
 
-	// get checksum (last 4 bytes) from public key hash
+	// get checksum (last 4 bytes) from public key hash, but not the version (first byte)
 	checkSum := decoded[len(decoded)-4:]
 	pubKeyHash := decoded[1 : len(decoded)-4]
 

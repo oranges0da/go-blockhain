@@ -15,14 +15,15 @@ type Transaction struct {
 }
 
 type TxInput struct {
-	ID   []byte // hash of transaction that is being spent/consumed
-	Vout int    // index of output in transaction that is being spent
-	Sig  string
+	ID     []byte // hash of transaction that is being spent/consumed
+	Vout   int    // index of output in transaction that is being spent
+	Sig    string // signature of input
+	PubKey []byte // pubkey of sender, used to sign and verify signature
 }
 
 type TxOutput struct {
-	Value  int    // amt of satoshis that is being "sent"
-	PubKey string // receiver's public key/address
+	Value      int    // amt of satoshis that is being "sent"
+	PubKeyHash []byte // hash of public key reciever
 }
 
 func (tx *Transaction) HashTx() {
@@ -60,10 +61,6 @@ func (tx *Transaction) IsCoinbase() bool {
 	return len(tx.Inputs) == 1 && tx.Inputs[0].Vout == -1
 }
 
-func (in *TxInput) InCanUnlock(data string) bool {
-	return in.Sig == data
-}
+func (tx *Transaction) OutCanUnlock(addr string) bool {
 
-func (out *TxOutput) OutCanUnlock(data string) bool {
-	return out.PubKey == data
 }
