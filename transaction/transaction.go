@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/mr-tron/base58"
-	"github.com/oranges0da/goblockchain/wallet"
+	"github.com/oranges0da/goblockchain/hashing"
 )
 
 type Transaction struct {
@@ -32,7 +32,7 @@ func (tx *Transaction) IsCoinbase() bool {
 
 // checks that an input belongs to an address
 func (in *TxInput) InCanUnlock(addr string) bool {
-	pubKeyHash := wallet.HashPubKey(in.PubKey)
+	pubKeyHash := hashing.HashPubKey(in.PubKey)
 
 	address := base58.Encode(pubKeyHash)
 

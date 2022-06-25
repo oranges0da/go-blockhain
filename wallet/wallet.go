@@ -8,7 +8,7 @@ import (
 	"crypto/sha256"
 
 	"github.com/mr-tron/base58"
-	"github.com/oranges0da/goblockchain/utils"
+	"github.com/oranges0da/goblockchain/hashing"
 )
 
 const (
@@ -25,7 +25,7 @@ type Wallet struct {
 func New() *Wallet {
 	privKey, pubKey := NewKeyPair()
 	wallet := &Wallet{privKey, pubKey, "", 0}
-	wallet.Address = wallet.NewAddress()
+	wallet.Address = wallet.SetAddress()
 
 	return wallet
 }
@@ -33,7 +33,9 @@ func New() *Wallet {
 func ValidateAddress(addr string) bool {
 	// decode and validate address by checking checksum
 	decoded, err := base58.Decode(addr)
-	utils.Handle(err, "Error decoding addres whilst validating.")
+	if err != nil {
+		panic(err)
+	}
 
 	// get checksum (last 4 bytes) from public key hash, but not the version (first byte)
 	checkSum := decoded[len(decoded)-4:]
@@ -47,14 +49,8 @@ func ValidateAddress(addr string) bool {
 
 // get address in base58 format from public key
 func (w *Wallet) SetAddress() string {
-	pubHash := HashPubKey(w.PubKey)
-
-	versionedHash := append([]byte{version}, pubHash...)
-	checkSum := CheckSum(versionedHash)
-
-	fullHash := append(versionedHash, checkSum...)
-
-	address := base58.Encode(fullHash)
+	pubHash := hashing.HashPubKey(w.PubKey)
+	address := hashing.GetAddress(pubHash)
 
 	return address
 }
@@ -64,16 +60,10 @@ func NewKeyPair() (ecdsa.PrivateKey, []byte) {
 	curve := elliptic.P256()
 
 	privKey, err := ecdsa.GenerateKey(curve, rand.Reader)
-	utils.Handle(err, "Problem generating private key.")
+	if err != nil {
+		panic(err)
+	}
 
 	pubKey := append(privKey.PublicKey.X.Bytes(), privKey.PublicKey.Y.Bytes()...)
 	return *privKey, pubKey
-}
-
-// get 4-byte long checksum from pubHash
-func CheckSum(hash []byte) []byte {
-	first := sha256.Sum256(hash)
-	second := sha256.Sum256(first[:])
-
-	return second[:4]
 }

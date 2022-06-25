@@ -1,4 +1,4 @@
-package utils
+package block
 
 import (
 	"bytes"
@@ -13,8 +13,9 @@ func ToBlock(data []byte) *model.Block {
 	decoder := gob.NewDecoder(bytes.NewReader(data))
 
 	err := decoder.Decode(&block)
-
-	Handle(err, "ToBlock")
+	if err != nil {
+		panic(err)
+	}
 
 	return &block
 }

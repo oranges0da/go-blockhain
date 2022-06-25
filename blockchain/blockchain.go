@@ -5,6 +5,7 @@ import (
 	"runtime"
 
 	block "github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/db"
 	"github.com/oranges0da/goblockchain/transaction"
 	"github.com/oranges0da/goblockchain/utils"
 	"github.com/xujiajun/nutsdb"
@@ -22,12 +23,12 @@ type Blockchain struct {
 
 // address that first transaction must take place
 func New(address string) (*Blockchain, error) {
-	if utils.DBExists() {
+	if db.DBExists() {
 		fmt.Println("Blockchain already exists")
 		runtime.Goexit()
 	}
 
-	db, err := utils.OpenDB()
+	db, err := db.OpenDB()
 	utils.Handle(err, "blockchain")
 	defer db.Close()
 
@@ -66,7 +67,7 @@ func (chain *Blockchain) AddBlock(tx *transaction.Transaction) error {
 	byte_block := utils.ToByte(block)
 
 	// open db
-	db, err := utils.OpenDB()
+	db, err := db.OpenDB()
 	utils.Handle(err, "blockchain")
 
 	// add block to db, with its hash as key

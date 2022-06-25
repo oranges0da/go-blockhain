@@ -1,22 +1,22 @@
-package utils
+package transaction
 
 import (
 	"encoding/hex"
 
-	"github.com/oranges0da/goblockchain/transaction"
+	"github.com/oranges0da/goblockchain/utils"
 )
 
 // find all unspent transactions for a certain address
-func FindUnspentTxs(addr string) []transaction.Transaction {
-	var unspentTxs []transaction.Transaction
+func FindUnspentTxs(addr string) []Transaction {
+	var unspentTxs []Transaction
 	var spentTxs = make(map[string][]int)
 
-	blocks, err := GetBlocks()
-	Handle(err, "error getting blocks in FindUnspentTxs")
+	blocks, err := utils.GetBlocks()
+	utils.Handle(err, "error getting blocks in FindUnspentTxs")
 
 	for _, block := range blocks {
 		tx := block.Transaction
-		txId := hex.EncodeToString(tx.ID)
+		txId := tx.ID
 
 	Outputs:
 		for outIdx, out := range tx.Outputs {
