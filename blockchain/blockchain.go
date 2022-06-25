@@ -6,7 +6,8 @@ import (
 
 	block "github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/db"
-	"github.com/oranges0da/goblockchain/transaction"
+	"github.com/oranges0da/goblockchain/handle"
+	"github.com/oranges0da/goblockchain/tx"
 	"github.com/oranges0da/goblockchain/utils"
 	"github.com/xujiajun/nutsdb"
 )
@@ -29,7 +30,7 @@ func New(address string) (*Blockchain, error) {
 	}
 
 	db, err := db.OpenDB()
-	utils.Handle(err, "blockchain")
+	handle.Handle(err, "blockchain")
 	defer db.Close()
 
 	// create genesis block
@@ -45,7 +46,7 @@ func New(address string) (*Blockchain, error) {
 
 		return err
 	})
-	utils.Handle(err, "blockchain")
+	handle.Handle(err, "blockchain")
 
 	// return blockchain with the genesis hash
 	blockchain := &Blockchain{
@@ -56,7 +57,7 @@ func New(address string) (*Blockchain, error) {
 	return blockchain, err
 }
 
-func (chain *Blockchain) AddBlock(tx *transaction.Transaction) error {
+func (chain *Blockchain) AddBlock(tx *tx.Transaction) error {
 	block := block.New(chain.BlockHeight+1, chain.LastHash, tx)
 
 	// set lastHash to block hash and increment blockHeight
@@ -68,12 +69,12 @@ func (chain *Blockchain) AddBlock(tx *transaction.Transaction) error {
 
 	// open db
 	db, err := db.OpenDB()
-	utils.Handle(err, "blockchain")
+	handle.Handle(err, "blockchain")
 
 	// add block to db, with its hash as key
 	err = db.Update(func(tx *nutsdb.Tx) error {
 		if err := tx.Put("root", block.Hash, byte_block, 1); err != nil {
-			utils.Handle(err, "blockchain")
+			handle.Handle(err, "blockchain")
 		}
 
 		return nil

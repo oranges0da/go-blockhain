@@ -1,11 +1,12 @@
 package model
 
-import "github.com/oranges0da/goblockchain/transaction"
+import "github.com/oranges0da/goblockchain/tx"
 
 type Block struct {
 	BlockID     int
-	PrevHash    []byte
-	Nonce       int
-	Transaction *transaction.Transaction
+	Timestamp   int64
 	Hash        []byte
+	Nonce       int
+	PrevHash    []byte
+	Transaction *tx.Transaction
 }

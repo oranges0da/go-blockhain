@@ -1,4 +1,4 @@
-package transaction
+package tx_utils
 
 import "encoding/hex"
 

@@ -1,7 +1,11 @@
-package transaction
+package tx_utils
 
-func FindUTXO(addr string) []TxOutput {
-	var UTXOs []TxOutput
+import (
+	"github.com/oranges0da/goblockchain/tx"
+)
+
+func FindUTXO(addr string) []tx.TxOutput {
+	var UTXOs []tx.TxOutput
 	unspentTxs := FindUnspentTxs(addr)
 
 	for _, tx := range unspentTxs {

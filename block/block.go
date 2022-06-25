@@ -3,7 +3,7 @@ package block
 import (
 	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/proof"
-	"github.com/oranges0da/goblockchain/transaction"
+	"github.com/oranges0da/goblockchain/tx"
 )
 
 // first find nonce using proof of work, then return hash of final block
@@ -14,7 +14,7 @@ func HashBlock(b *model.Block) (int, []byte) {
 	return nonce, hash[:]
 }
 
-func New(blockID int, prevHash []byte, tx *transaction.Transaction) *model.Block {
+func New(blockID int, prevHash []byte, tx *tx.Transaction) *model.Block {
 	block := &model.Block{
 		BlockID:     blockID,
 		PrevHash:    prevHash,
@@ -26,7 +26,7 @@ func New(blockID int, prevHash []byte, tx *transaction.Transaction) *model.Block
 
 // like New() but only for genesis block, to param is the address the reward will be sent to
 func Genesis(addr string) *model.Block {
-	coinbase := transaction.NewCoinbase(addr, "example sig")
+	coinbase := tx.NewCoinbase(addr, "example sig")
 
 	block := &model.Block{
 		PrevHash:    []byte("0"),
