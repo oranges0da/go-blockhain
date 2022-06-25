@@ -1,7 +1,6 @@
-package utils
+package block_utils
 
 import (
-	"github.com/oranges0da/goblockchain/block_utils"
 	"github.com/oranges0da/goblockchain/db"
 	"github.com/oranges0da/goblockchain/handle"
 	"github.com/oranges0da/goblockchain/model"
@@ -20,7 +19,7 @@ func GetBlocks() ([]*model.Block, error) {
 		handle.Handle(err, "Error getting all entries from db (block)")
 
 		for _, entry := range entries {
-			blocks = append(blocks, block_utils.ToBlock(entry.Value))
+			blocks = append(blocks, ToBlock(entry.Value))
 		}
 
 		return nil

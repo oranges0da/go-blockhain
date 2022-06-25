@@ -2,9 +2,11 @@ package tx
 
 import (
 	"bytes"
+	"crypto/sha256"
 
 	"github.com/mr-tron/base58"
 	"github.com/oranges0da/goblockchain/hashing"
+	"github.com/oranges0da/goblockchain/utils"
 )
 
 type Transaction struct {
@@ -14,56 +16,29 @@ type Transaction struct {
 	Locktime int
 }
 
-type TxInput struct {
-	ID     []byte // hash of transaction that is being spent/consumed
-	Vout   int    // index of output in the previous transaction that is being spent
-	Sig    string // signature of input
-	PubKey []byte // pubkey of sender, used to sign and verify signature
+// msg is any string that reciever can put into transaction, and therefore the blockchain, forever
+// e.g. "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
+func NewCoinbase(addr, msg string) {
+	in := TxInput{
+		ID:     []byte{},
+		Vout:   -1,
+		Sig:    []byte(msg),
+		PubKey: []byte{00000000000000000000000000000000},
+	}
+	out := TxOutput{
+		Value: 50,
+		PubKeyHash: base58.D
+	}
 }
 
-type TxOutput struct {
-	Value      int    // amt of satoshis that is being "sent"
-	PubKeyHash []byte // hash of public key reciever
+func (tx *Transaction) HashTx() {
+	byte_tx := utils.ToByte(tx)
+
+	hash := sha256.Sum256(byte_tx)
+
+	tx.ID = hash[:]
 }
 
 func (tx *Transaction) IsCoinbase() bool {
 	return len(tx.Inputs) == 1 && tx.Inputs[0].Vout == -1
-}
-
-// checks that an input belongs to an address
-func (in *TxInput) InCanUnlock(addr string) bool {
-	pubKeyHash := hashing.HashPubKey(in.PubKey)
-
-	address := base58.Encode(pubKeyHash)
-
-	return address == addr
-}
-
-// checks if output belongs to certain address
-func (out *TxOutput) OutCanUnlock(addr string) bool {
-	pubKeyData, err := base58.Decode(addr)
-	if err != nil {
-		panic(err)
-	}
-
-	// remove version number and checksum to just get the hash
-	pubKeyHash := pubKeyData[1 : len(pubKeyData)-4]
-
-	return bytes.Equal(out.PubKeyHash, pubKeyHash)
-}
-
-// sets public key hash in output from address provided
-func (out *TxOutput) Lock(addr string) {
-	pubKeyData, err := base58.Decode(addr)
-	if err != nil {
-		panic(err)
-	}
-
-	pubKeyHash := pubKeyData[1 : len(pubKeyData)-4] // remove version number and checksum to just get the hash
-
-	out.PubKeyHash = pubKeyHash
-}
-
-func (out *TxOutput) IsOutLocked(pubKeyHash []byte) bool {
-	return bytes.Equal(out.PubKeyHash, pubKeyHash)
 }
