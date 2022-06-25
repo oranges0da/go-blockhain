@@ -46,7 +46,7 @@ func ValidateAddress(addr string) bool {
 }
 
 // get address in base58 format from public key
-func (w *Wallet) NewAddress() string {
+func (w *Wallet) SetAddress() string {
 	pubHash := HashPubKey(w.PubKey)
 
 	versionedHash := append([]byte{version}, pubHash...)
@@ -68,13 +68,6 @@ func NewKeyPair() (ecdsa.PrivateKey, []byte) {
 
 	pubKey := append(privKey.PublicKey.X.Bytes(), privKey.PublicKey.Y.Bytes()...)
 	return *privKey, pubKey
-}
-
-func HashPubKey(pubKey []byte) []byte {
-	firstHash := sha256.Sum256(pubKey)
-	finalHash := sha256.Sum256(firstHash[:])
-
-	return finalHash[:]
 }
 
 // get 4-byte long checksum from pubHash

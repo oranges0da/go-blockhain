@@ -4,6 +4,7 @@ import (
 	"bytes"
 
 	"github.com/mr-tron/base58"
+	"github.com/oranges0da/goblockchain/wallet"
 )
 
 type Transaction struct {
@@ -29,17 +30,29 @@ func (tx *Transaction) IsCoinbase() bool {
 	return len(tx.Inputs) == 1 && tx.Inputs[0].Vout == -1
 }
 
+// checks that an input belongs to an address
+func (in *TxInput) InCanUnlock(addr string) bool {
+	pubKeyHash := wallet.HashPubKey(in.PubKey)
+
+	address := base58.Encode(pubKeyHash)
+
+	return address == addr
+}
+
+// checks if output belongs to certain address
 func (out *TxOutput) OutCanUnlock(addr string) bool {
 	pubKeyData, err := base58.Decode(addr)
 	if err != nil {
 		panic(err)
 	}
 
-	pubKeyHash := pubKeyData[1 : len(pubKeyData)-4] // remove version number and checksum to just get the hash
+	// remove version number and checksum to just get the hash
+	pubKeyHash := pubKeyData[1 : len(pubKeyData)-4]
 
 	return bytes.Equal(out.PubKeyHash, pubKeyHash)
 }
 
+// sets public key hash in output from address provided
 func (out *TxOutput) Lock(addr string) {
 	pubKeyData, err := base58.Decode(addr)
 	if err != nil {

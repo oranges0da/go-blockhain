@@ -12,7 +12,7 @@ Work:
 		txId := hex.EncodeToString(tx.ID)
 
 		for outIdx, out := range tx.Outputs {
-			if out.PubKey == addr && accumulated < amt {
+			if string(out.PubKeyHash) == addr && accumulated < amt {
 				accumulated += out.Value
 				unspentOuts[txId] = append(unspentOuts[txId], outIdx)
 
