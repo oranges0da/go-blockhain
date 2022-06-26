@@ -7,8 +7,8 @@ import (
 )
 
 // first find nonce using proof of work, then return hash of final block
-func HashBlock(b *model.Block) (int, []byte) {
-	pow := proof.New(b)
+func Hash(block *model.Block) (int, []byte) {
+	pow := proof.New(block)
 	nonce, hash := pow.Run()
 
 	return nonce, hash[:]
@@ -25,8 +25,8 @@ func New(blockID int, prevHash []byte, tx *tx.Transaction) *model.Block {
 }
 
 // like New() but only for genesis block, to param is the address the reward will be sent to
-func Genesis(addr string) *model.Block {
-	coinbase := tx.NewCoinbase(addr, "example sig")
+func Genesis(addr, msg string) *model.Block {
+	coinbase := tx.NewCoinbase(addr, msg)
 
 	block := &model.Block{
 		PrevHash:    []byte("0"),
@@ -35,7 +35,7 @@ func Genesis(addr string) *model.Block {
 		Transaction: coinbase,
 	}
 
-	nonce, hash := HashBlock(block)
+	nonce, hash := Hash(block)
 	block.Nonce = nonce
 	block.Hash = hash[:]
 

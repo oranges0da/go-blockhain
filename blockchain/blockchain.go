@@ -7,14 +7,14 @@ import (
 	block "github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/db"
 	"github.com/oranges0da/goblockchain/handle"
-	"github.com/oranges0da/goblockchain/tx"
+	"github.com/oranges0da/goblockchain/model"
 	"github.com/oranges0da/goblockchain/utils"
 	"github.com/xujiajun/nutsdb"
 )
 
 const (
 	bucket      = "root"
-	genesisText = "Hello, this is the genesis block!"
+	genesisText = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
 )
 
 type Blockchain struct {
@@ -34,7 +34,7 @@ func New(address string) (*Blockchain, error) {
 	defer db.Close()
 
 	// create genesis block
-	genesis := block.Genesis(address)
+	genesis := block.Genesis(address, genesisText)
 
 	err = db.Update(func(tx *nutsdb.Tx) error {
 		// serialize genesis block
@@ -57,9 +57,7 @@ func New(address string) (*Blockchain, error) {
 	return blockchain, err
 }
 
-func (chain *Blockchain) AddBlock(tx *tx.Transaction) error {
-	block := block.New(chain.BlockHeight+1, chain.LastHash, tx)
-
+func (chain *Blockchain) AddBlock(block *model.Block) error {
 	// set lastHash to block hash and increment blockHeight
 	chain.LastHash = block.Hash
 	chain.BlockHeight = block.BlockID

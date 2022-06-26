@@ -13,10 +13,6 @@ type Transaction struct {
 	Locktime int
 }
 
-func New(to, from string, amt int) *Transaction {
-
-}
-
 // msg is any string that reciever can put into transaction, and therefore the blockchain, forever
 // e.g. "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
 func NewCoinbase(addr, msg string) *Transaction {
