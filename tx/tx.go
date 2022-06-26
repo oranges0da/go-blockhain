@@ -4,6 +4,7 @@ import (
 	"bytes"
 
 	"github.com/mr-tron/base58"
+	"github.com/oranges0da/goblockchain/handle"
 	"github.com/oranges0da/goblockchain/hashing"
 )
 
@@ -17,6 +18,20 @@ type TxInput struct {
 type TxOutput struct {
 	Value      int    // amt of satoshis that is being "sent"
 	PubKeyHash []byte // hash of public key reciever
+}
+
+func NewTxOut(value int, addr string) TxOutput {
+	pubKeyHash_unformatted, err := base58.Decode(addr)
+	handle.Handle(err, "Error decoding address while creating new TxOutput.")
+
+	pubKeyHash := pubKeyHash_unformatted[1 : len(pubKeyHash_unformatted)-4]
+
+	txOut := TxOutput{
+		Value:      value,
+		PubKeyHash: pubKeyHash,
+	}
+
+	return txOut
 }
 
 // checks that an address can unclock an input for spending
