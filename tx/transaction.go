@@ -13,9 +13,13 @@ type Transaction struct {
 	Locktime int
 }
 
+func New(to, from string, amt int) *Transaction {
+
+}
+
 // msg is any string that reciever can put into transaction, and therefore the blockchain, forever
 // e.g. "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
-func NewCoinbaseTx(addr, msg string) *Transaction {
+func NewCoinbase(addr, msg string) *Transaction {
 	in := TxInput{
 		ID:     []byte{},
 		Vout:   -1,
@@ -31,12 +35,12 @@ func NewCoinbaseTx(addr, msg string) *Transaction {
 		Locktime: 0,
 	}
 
-	tx.HashTx()
+	tx.Hash()
 
 	return tx
 }
 
-func (tx *Transaction) HashTx() {
+func (tx *Transaction) Hash() {
 	byte_tx := utils.ToByte(tx)
 
 	hash := sha256.Sum256(byte_tx)
