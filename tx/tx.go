@@ -1,6 +1,7 @@
 package tx
 
 import (
+	"crypto/ecdsa"
 	"crypto/sha256"
 
 	"github.com/oranges0da/goblockchain/utils"
@@ -13,13 +14,19 @@ type Transaction struct {
 	Locktime int
 }
 
-// msg is any string that reciever can put into transaction, and therefore the blockchain, forever
-// e.g. "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
+func (tx *Transaction) Sign(privKey *ecdsa.PrivateKey, prevTxs map[string]Transaction) {
+	if tx.IsCoinbase() {
+		return
+	}
+}
+
+// msg is any string that miner can put into blockchain forever
 func NewCoinbase(addr, msg string) *Transaction {
+	// not refrencing any previous output for this txs input, so ID and PubKey will be empty, and Vout is not accesible(-1 is not an index)
 	in := TxInput{
 		ID:     []byte{},
 		Vout:   -1,
-		Sig:    []byte(msg),
+		Sig:    []byte{},
 		PubKey: []byte{00000000000000000000000000000000},
 	}
 	out := NewTxOut(50, addr)
