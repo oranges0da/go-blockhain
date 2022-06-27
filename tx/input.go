@@ -1,6 +1,6 @@
 package tx
 
-import "github.com/oranges0da/goblockchain/hashing"
+import "github.com/oranges0da/goblockchain/hash_utils"
 
 type TxInput struct {
 	ID     []byte // hash of transaction that is being spent/consumed
@@ -11,8 +11,8 @@ type TxInput struct {
 
 // checks that an address can unclock an input for spending
 func (in *TxInput) InCanUnlock(addr string) bool {
-	pubKeyHash := hashing.HashPubKey(in.PubKey)
-	address := hashing.GetAddress(pubKeyHash)
+	pubKeyHash := hash_utils.HashPubKey(in.PubKey)
+	address := hash_utils.GetAddress(pubKeyHash)
 
 	return address == addr
 }

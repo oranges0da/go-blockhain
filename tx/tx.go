@@ -1,7 +1,6 @@
 package tx
 
 import (
-	"crypto/ecdsa"
 	"crypto/sha256"
 
 	"github.com/oranges0da/goblockchain/utils"
@@ -14,10 +13,9 @@ type Transaction struct {
 	Locktime int
 }
 
-func (tx *Transaction) Sign(privKey *ecdsa.PrivateKey, prevTxs map[string]Transaction) {
-	if tx.IsCoinbase() {
-		return
-	}
+//
+func New(to, from string, amt int) *Transaction {
+
 }
 
 // msg is any string that miner can put into blockchain forever

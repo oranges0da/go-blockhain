@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/oranges0da/goblockchain/utils"
+	"github.com/oranges0da/goblockchain/handle"
 )
 
 const (
@@ -42,10 +42,10 @@ func (ws *Wallets) Save() {
 
 	enc := gob.NewEncoder(&content)
 	err := enc.Encode(ws)
-	utils.Handle(err, "Problem encoding/saving wallets.")
+	handle.Handle(err, "Problem encoding/saving wallets.")
 
 	err = ioutil.WriteFile(walletFile, content.Bytes(), 0644)
-	utils.Handle(err, "Problem saving wallets.")
+	handle.Handle(err, "Problem saving wallets.")
 }
 
 func (ws *Wallets) Load() error {

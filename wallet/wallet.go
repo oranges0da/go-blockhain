@@ -8,7 +8,7 @@ import (
 	"crypto/sha256"
 
 	"github.com/mr-tron/base58"
-	"github.com/oranges0da/goblockchain/hashing"
+	"github.com/oranges0da/goblockchain/hash_utils"
 )
 
 const (
@@ -49,8 +49,8 @@ func ValidateAddress(addr string) bool {
 
 // get address in base58 format from public key
 func (w *Wallet) SetAddress() string {
-	pubHash := hashing.HashPubKey(w.PubKey)
-	address := hashing.GetAddress(pubHash)
+	pubHash := hash_utils.HashPubKey(w.PubKey)
+	address := hash_utils.GetAddress(pubHash)
 
 	return address
 }
