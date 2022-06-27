@@ -1,10 +1,6 @@
-package block
+package block_utils
 
 import (
-	"bytes"
-	"encoding/gob"
-
-	"github.com/oranges0da/goblockchain/block_utils"
 	"github.com/oranges0da/goblockchain/db"
 	"github.com/oranges0da/goblockchain/handle"
 	"github.com/oranges0da/goblockchain/model"
@@ -23,22 +19,11 @@ func GetBlocks() ([]*model.Block, error) {
 		handle.Handle(err, "Error getting all entries from db (block)")
 
 		for _, entry := range entries {
-			blocks = append(blocks, block_utils.ToBlock(entry.Value))
+			blocks = append(blocks, ToBlock(entry.Value))
 		}
 
 		return nil
 	})
 
 	return blocks, err
-}
-
-func ToBlock(data []byte) *model.Block {
-	var block model.Block
-
-	decoder := gob.NewDecoder(bytes.NewReader(data))
-
-	err := decoder.Decode(&block)
-	handle.Handle(err, "Error whilst trying to convert to block.")
-
-	return &block
 }
