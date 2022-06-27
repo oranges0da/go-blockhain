@@ -11,21 +11,25 @@ import (
 	"github.com/oranges0da/goblockchain/hash_utils"
 )
 
-const (
-	version = byte(0x00)
-)
-
 type Wallet struct {
-	PrivKey ecdsa.PrivateKey
-	PubKey  []byte
-	Address string
-	Balance int // balance in satoshis
+	PrivKey    ecdsa.PrivateKey
+	PubKey     []byte
+	PubKeyHash []byte
+	Address    string
+	Balance    int // balance in satoshis
 }
 
 func New() *Wallet {
 	privKey, pubKey := NewKeyPair()
-	wallet := &Wallet{privKey, pubKey, "", 0}
-	wallet.Address = wallet.SetAddress()
+	pubKeyHash := hash_utils.HashPubKey(pubKey)
+	address := hash_utils.GetAddress(pubKeyHash)
+
+	wallet := &Wallet{
+		PrivKey:    privKey,
+		PubKey:     pubKey,
+		PubKeyHash: pubKeyHash,
+		Address:    address,
+	}
 
 	return wallet
 }
@@ -45,14 +49,6 @@ func ValidateAddress(addr string) bool {
 	testCheckSum := testHash[:len(testHash)-4]
 
 	return bytes.Equal(checkSum, testCheckSum)
-}
-
-// get address in base58 format from public key
-func (w *Wallet) SetAddress() string {
-	pubHash := hash_utils.HashPubKey(w.PubKey)
-	address := hash_utils.GetAddress(pubHash)
-
-	return address
 }
 
 // generate new private and public keys
