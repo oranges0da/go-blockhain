@@ -3,7 +3,7 @@ package tx_utils
 import (
 	"encoding/hex"
 
-	"github.com/oranges0da/goblockchain/block_utils"
+	"github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/handle"
 	"github.com/oranges0da/goblockchain/tx"
 )
@@ -13,7 +13,7 @@ func FindUnspentTxs(addr string) []tx.Transaction {
 	var unspentTxs []tx.Transaction
 	var spentTxs = make(map[string][]int)
 
-	blocks, err := block_utils.GetBlocks()
+	blocks, err := block.GetBlocks()
 	handle.Handle(err, "Error getting blocks in FindUnspentTxs")
 
 	for _, block := range blocks {

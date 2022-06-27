@@ -3,9 +3,7 @@ package tx
 import (
 	"crypto/sha256"
 
-	"github.com/oranges0da/goblockchain/hash_utils"
 	"github.com/oranges0da/goblockchain/utils"
-	"github.com/oranges0da/goblockchain/wallet"
 )
 
 type Transaction struct {
@@ -13,17 +11,6 @@ type Transaction struct {
 	Inputs   []TxInput
 	Outputs  []TxOutput
 	Locktime int
-}
-
-// main transaction logic, will check if the from address has sufficient funds (UTXOs), then sign tx
-func New(to, from string, amt int) *Transaction {
-	var inputs []TxInput
-	var outputs []TxOutput
-
-	pubKeyHash := hash_utils.GetPubKeyHash(from)
-
-	wallets := wallet.NewWallets()
-	w := wallets.GetWallet(from)
 }
 
 // msg is any string that miner can put into blockchain forever

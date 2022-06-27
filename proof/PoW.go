@@ -11,7 +11,7 @@ import (
 	"github.com/oranges0da/goblockchain/utils"
 )
 
-const diff = 19
+const diff = 16
 
 type PoW struct {
 	Target *big.Int // hash target that should be reached with nonce

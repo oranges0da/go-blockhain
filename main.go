@@ -2,26 +2,24 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/oranges0da/goblockchain/blockchain"
-	"github.com/oranges0da/goblockchain/utils"
+	"github.com/oranges0da/goblockchain/handle"
+	"github.com/oranges0da/goblockchain/wallet"
 )
 
 func main() {
-	BlockChain, err := blockchain.New("example addrr")
+	BlockChain, err := blockchain.New("randomaddress")
+	handle.Handle(err, "Error creating blockchain in main.")
+	fmt.Printf("Blockchain: %v", BlockChain)
 
-	if err != nil {
-		log.Printf("Main blockchain error: %v", err)
-	}
+	w := wallet.New()
+	wallets := wallet.NewWallets()
 
-	log.Println("Created new blockchain, exited New()")
-	log.Printf("Created blockchain :%x", BlockChain)
+	wallets.Add(w)
+	wallets.Save()
 
-	blocks, err := utils.GetBlocks()
-	utils.Handle(err, "main")
+	wal := wallets.Get("1SHf8PShy4ryFypVCrKt8QRb5JyJcSXeXPCnHKm1sTTWYy5eVS")
 
-	for _, b := range blocks {
-		fmt.Printf("Block: %v\n", b)
-	}
+	fmt.Printf("wallet: %v", wal)
 }
