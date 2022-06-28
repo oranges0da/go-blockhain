@@ -14,7 +14,7 @@ func Hash(block *model.Block) (int, []byte) {
 	return nonce, hash[:]
 }
 
-func New(blockID int, prevHash []byte, tx *tx.Transaction) *model.Block {
+func New(blockID int, prevHash []byte, tx *model.Transaction) *model.Block {
 	block := &model.Block{
 		BlockID:     blockID,
 		PrevHash:    prevHash,

@@ -1,25 +1,17 @@
 package tx
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"log"
 
 	"github.com/oranges0da/goblockchain/block_utils"
 	"github.com/oranges0da/goblockchain/handle"
-	"github.com/oranges0da/goblockchain/utils"
+	"github.com/oranges0da/goblockchain/model"
 )
 
-type Transaction struct {
-	ID       []byte // hash of transaction
-	Inputs   []TxInput
-	Outputs  []TxOutput
-	Locktime int
-}
-
 func New(to, from string, amt int) {
-	var inputs []TxInput
-	var outputs []TxOutput
+	var inputs []model.TxInput
+	var outputs []model.TxOutput
 
 	acc, validOuts := FindSpendableOuts(from, amt)
 
@@ -29,9 +21,9 @@ func New(to, from string, amt int) {
 }
 
 // msg is any string that miner can put into blockchain forever
-func NewCoinbase(addr, msg string) *Transaction {
+func NewCoinbase(addr, msg string) *model.Transaction {
 	// not refrencing any previous output for this txs input, so ID and PubKey will be empty, and Vout is not accesible(-1 is not an index)
-	in := TxInput{
+	in := model.TxInput{
 		ID:     []byte{},
 		Vout:   -1,
 		Sig:    []byte{},
@@ -39,10 +31,10 @@ func NewCoinbase(addr, msg string) *Transaction {
 	}
 	out := NewTxOut(50, addr)
 
-	tx := &Transaction{
+	tx := &model.Transaction{
 		ID:       nil,
-		Inputs:   []TxInput{in},
-		Outputs:  []TxOutput{out},
+		Inputs:   []model.TxInput{in},
+		Outputs:  []model.TxOutput{out},
 		Locktime: 0,
 	}
 
@@ -51,26 +43,14 @@ func NewCoinbase(addr, msg string) *Transaction {
 	return tx
 }
 
-func (tx *Transaction) Hash() {
-	byte_tx := utils.ToByte(tx)
-
-	hash := sha256.Sum256(byte_tx)
-
-	tx.ID = hash[:]
-}
-
-func (tx *Transaction) IsCoinbase() bool {
-	return len(tx.Inputs) == 1 && tx.Inputs[0].Vout == -1
-}
-
 // return array of unspent txs for a certain address
-func FindUTXO(addr string) []TxOutput {
-	var UTXOs []TxOutput
+func FindUTXO(addr string) []model.TxOutput {
+	var UTXOs []model.TxOutput
 	unspentTxs := FindUnspentTxs(addr)
 
 	for _, tx := range unspentTxs {
 		for _, out := range tx.Outputs {
-			if out.OutCanUnlock(addr) {
+			if OutCanUnlock(out, addr) {
 				UTXOs = append(UTXOs, out)
 			}
 		}
@@ -105,8 +85,8 @@ Work:
 }
 
 // find all unspent transactions for a certain address
-func FindUnspentTxs(addr string) []Transaction {
-	var unspentTxs []Transaction
+func FindUnspentTxs(addr string) []model.Transaction {
+	var unspentTxs []model.Transaction
 	var spentTxs = make(map[string][]int)
 
 	blocks, err := block_utils.GetBlocks()
@@ -125,13 +105,13 @@ func FindUnspentTxs(addr string) []Transaction {
 					}
 				}
 			}
-			if out.OutCanUnlock(addr) {
+			if OutCanUnlock(out, addr) {
 				unspentTxs = append(unspentTxs, *tx)
 			}
 		}
 		if !tx.IsCoinbase() {
 			for _, in := range tx.Inputs {
-				if in.InCanUnlock(addr) {
+				if InCanUnlock(in, addr) {
 					inTxId := hex.EncodeToString(in.ID)
 					spentTxs[inTxId] = append(spentTxs[inTxId], in.Vout)
 				}
