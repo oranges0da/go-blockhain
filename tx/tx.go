@@ -7,17 +7,54 @@ import (
 	"github.com/oranges0da/goblockchain/block_utils"
 	"github.com/oranges0da/goblockchain/handle"
 	"github.com/oranges0da/goblockchain/model"
+	"github.com/oranges0da/goblockchain/wallet"
 )
 
-func New(to, from string, amt int) {
+func New(to, from string, amt int, locktime int) *model.Transaction {
 	var inputs []model.TxInput
 	var outputs []model.TxOutput
 
+	// check if spender has enough unspent outputs to send this tx
 	acc, validOuts := FindSpendableOuts(from, amt)
 
 	if acc < amt {
 		log.Panic("Insufficient funds.")
 	}
+
+	// load wallet of sender
+	wallets := wallet.LoadWallets()
+	w := wallets.Get(from)
+
+	// for every valid output of sender, append prev Vout to this tx's inputs
+	for txid, outs := range validOuts {
+		txID, err := hex.DecodeString(txid)
+		handle.Handle(err, "Error decoding txID while making new tx.")
+
+		for _, out := range outs {
+			input := model.TxInput{txID, out, nil, w.PubKey}
+			inputs = append(inputs, input)
+		}
+	}
+
+	// outputs include output to reciever
+	outputs = append(outputs, *NewTxOut(amt, to))
+
+	// and if sender has more than amt, the remainder of their funds will be sent back
+	if acc > amt {
+		outputs = append(outputs, *NewTxOut(acc-amt, from))
+	}
+
+	tx := &model.Transaction{
+		ID:       nil,
+		Inputs:   inputs,
+		Outputs:  outputs,
+		Locktime: locktime,
+	}
+
+	tx.Hash()
+	tx.Sign()
+
+	return tx
 }
 
 // msg is any string that miner can put into blockchain forever

@@ -12,10 +12,10 @@ type TxOutput struct {
 	PubKeyHash []byte // hash of public key reciever
 }
 
-func NewTxOut(value int, addr string) model.TxOutput {
+func NewTxOut(value int, addr string) *model.TxOutput {
 	pubKeyHash := hash_utils.GetPubKeyHash(addr)
 
-	txOut := model.TxOutput{
+	txOut := &model.TxOutput{
 		Value:      value,
 		PubKeyHash: pubKeyHash,
 	}
