@@ -2,8 +2,11 @@ package model
 
 import (
 	"bytes"
+	"crypto/ecdsa"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/gob"
+	"encoding/hex"
 	"log"
 )
 
@@ -44,4 +47,34 @@ func (tx *Transaction) Hash() {
 
 func (tx *Transaction) IsCoinbase() bool {
 	return len(tx.Inputs) == 1 && tx.Inputs[0].Vout == -1
+}
+
+func (tx *Transaction) Sign(privKey ecdsa.PrivateKey) {
+	if tx.IsCoinbase() {
+		return
+	}
+
+	for _, in := range tx.Inputs {
+		if prevTXs[hex.EncodeToString(in.ID)].ID == nil {
+			log.Panic("ERROR: Previous transaction is not correct")
+		}
+	}
+
+	for inId, in := range tx.Inputs {
+		prevTX := prevTXs[hex.EncodeToString(in.ID)]
+		tx.Inputs[inId].Signature = nil
+		tx.Inputs[inId].PubKey = prevTX.Outputs[in.Out].PubKeyHash
+		tx.Hash()
+		tx.Inputs[inId].PubKey = nil
+
+		r, s, err := ecdsa.Sign(rand.Reader, &privKey, tx.ID)
+		if err != nil {
+			log.Panic(err)
+		}
+
+		signature := append(r.Bytes(), s.Bytes()...)
+
+		tx.Inputs[inId].Sig = signature
+
+	}
 }

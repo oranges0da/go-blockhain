@@ -37,11 +37,11 @@ func New(to, from string, amt int, locktime int) *model.Transaction {
 	}
 
 	// outputs include output to reciever
-	outputs = append(outputs, *NewTxOut(amt, to))
+	outputs = append(outputs, NewTxOut(amt, to))
 
 	// and if sender has more than amt, the remainder of their funds will be sent back
 	if acc > amt {
-		outputs = append(outputs, *NewTxOut(acc-amt, from))
+		outputs = append(outputs, NewTxOut(acc-amt, from))
 	}
 
 	tx := &model.Transaction{
@@ -52,7 +52,7 @@ func New(to, from string, amt int, locktime int) *model.Transaction {
 	}
 
 	tx.Hash()
-	tx.Sign()
+	tx.Sign(w.PrivKey)
 
 	return tx
 }
