@@ -3,6 +3,7 @@ package model
 import (
 	"bytes"
 	"crypto/ecdsa"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/gob"
 	"log"
@@ -52,5 +53,14 @@ func (tx *Transaction) Sign(privKey ecdsa.PrivateKey) {
 		return
 	}
 
-	prevTxs := make(map[string]Transaction)
+	for inID, in := range tx.Inputs {
+		r, s, err := ecdsa.Sign(rand.Reader, &privKey, in.ID)
+		if err != nil {
+			log.Panic(err)
+		}
+
+		sig := append(r.Bytes(), s.Bytes()...)
+
+		tx.Inputs[inID].Sig = sig
+	}
 }
