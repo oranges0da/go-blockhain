@@ -32,3 +32,4 @@ env.local
 .vscode
 /.vscode
 vscode/
+**/.vscode
