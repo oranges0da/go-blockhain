@@ -1,7 +1,9 @@
 package tx
 
 import (
+	"bytes"
 	"encoding/hex"
+	"errors"
 	"log"
 
 	"github.com/oranges0da/goblockchain/block_utils"
@@ -78,6 +80,19 @@ func NewCoinbase(addr, msg string) *model.Transaction {
 	tx.Hash()
 
 	return tx
+}
+
+func GetTx(ID []byte) (model.Transaction, error) {
+	blocks, err := block_utils.GetBlocks()
+	handle.Handle(err, "Error getting blocks while trying to find tx.")
+
+	for _, block := range blocks {
+		if bytes.Compare(ID, block.Transaction.ID) == 0 {
+			return *block.Transaction, nil
+		}
+	}
+
+	return model.Transaction{}, errors.New("Transaction does not exist.")
 }
 
 // return array of unspent txs for a certain address
