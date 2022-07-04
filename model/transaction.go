@@ -48,6 +48,33 @@ func (tx *Transaction) IsCoinbase() bool {
 	return len(tx.Inputs) == 1 && tx.Inputs[0].Vout == -1
 }
 
+// output tx that does not contain sig for verifying purposes "copying"
+func (tx *Transaction) Copy() *Transaction {
+	var inputs []TxInput
+	var outputs []TxOutput
+
+	for _, in := range tx.Inputs {
+		inCopy := TxInput{in.ID, in.Vout, nil, nil}
+
+		inputs = append(inputs, inCopy)
+	}
+
+	for _, out := range tx.Outputs {
+		outCopy := TxOutput{out.Value, out.PubKeyHash}
+
+		outputs = append(outputs, outCopy)
+	}
+
+	tx = &Transaction{
+		ID:       tx.ID,
+		Inputs:   inputs,
+		Outputs:  outputs,
+		Locktime: tx.Locktime,
+	}
+
+	return tx
+}
+
 func (tx *Transaction) Sign(privKey ecdsa.PrivateKey) {
 	if tx.IsCoinbase() {
 		return
