@@ -23,7 +23,7 @@ func NewTree(txs [][]byte) *Tree {
 	for i := 0; i < len(txs)/2; i++ {
 		var level []Node
 
-		for j := 0; j < len(nodes); j += 2 {
+		for j := 0; j < len(nodes)/2; j++ {
 			node := NewNode(&nodes[j], &nodes[j+1], nil)
 			level = append(level, *node)
 		}
