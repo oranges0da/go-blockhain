@@ -1,6 +1,5 @@
 new:
 	go run main.go
-
 fresh:
 	rm -rf tmp
 dev:

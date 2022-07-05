@@ -33,7 +33,7 @@ func New(to, from string, amt int, locktime int) *model.Transaction {
 		handle.Handle(err, "Error decoding txID while making new tx.")
 
 		for _, out := range outs {
-			input := model.TxInput{txID, out, nil, w.PubKey}
+			input := model.TxInput{ID: txID, Vout: out, Sig: nil, PubKey: w.PubKey}
 			inputs = append(inputs, input)
 		}
 	}
@@ -87,12 +87,12 @@ func GetTx(ID []byte) (model.Transaction, error) {
 	handle.Handle(err, "Error getting blocks while trying to find tx.")
 
 	for _, block := range blocks {
-		if bytes.Compare(ID, block.Transaction.ID) == 0 {
+		if bytes.Equal(ID, block.Transaction.ID) {
 			return *block.Transaction, nil
 		}
 	}
 
-	return model.Transaction{}, errors.New("Transaction does not exist.")
+	return model.Transaction{}, errors.New("transaction does not exist")
 }
 
 // return array of unspent txs for a certain address
