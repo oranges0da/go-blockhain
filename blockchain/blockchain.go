@@ -34,7 +34,7 @@ func New(address string) (*Blockchain, error) {
 	defer db.Close()
 
 	// create genesis block
-	genesis := block.Genesis(address, genesisText)
+	genesis := block.Genesis(address)
 
 	err = db.Update(func(tx *nutsdb.Tx) error {
 		// serialize genesis block
