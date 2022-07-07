@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/oranges0da/goblockchain/blockchain"
+	"github.com/oranges0da/goblockchain/chain"
 	"github.com/oranges0da/goblockchain/handle"
 	"github.com/oranges0da/goblockchain/wallet"
 )
 
 func main() {
-	BlockChain, err := blockchain.New("randomaddress")
+	BlockChain, err := chain.New("randomaddress")
 	handle.Handle(err, "Error creating blockchain in main.")
 	fmt.Printf("Blockchain: %v", BlockChain)
 

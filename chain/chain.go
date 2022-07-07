@@ -1,10 +1,10 @@
-package blockchain
+package chain
 
 import (
 	"fmt"
 	"runtime"
 
-	block "github.com/oranges0da/goblockchain/block"
+	"github.com/oranges0da/goblockchain/block"
 	"github.com/oranges0da/goblockchain/db"
 	"github.com/oranges0da/goblockchain/handle"
 	"github.com/oranges0da/goblockchain/model"
