@@ -13,8 +13,7 @@ import (
 )
 
 const (
-	bucket      = "root"
-	genesisText = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
+	bucket = "root"
 )
 
 type Blockchain struct {

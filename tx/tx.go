@@ -59,7 +59,7 @@ func New(to, from string, amt int, locktime int) *model.Transaction {
 	return tx
 }
 
-func NewCoinbase(addr string) *model.Transaction {
+func NewCoinbase(addr, msg string) *model.Transaction {
 	// not refrencing any previous output for this txs input, so ID and PubKey will be empty, and Vout is not accesible(-1 is not an index)
 	in := model.TxInput{
 		ID:     []byte{},
@@ -70,7 +70,7 @@ func NewCoinbase(addr string) *model.Transaction {
 	out := NewTxOut(50, addr)
 
 	tx := &model.Transaction{
-		ID:       []byte("CNBC, Bitcoin posts its worst quarter in more than a decade"),
+		ID:       []byte(msg),
 		Inputs:   []model.TxInput{in},
 		Outputs:  []model.TxOutput{out},
 		Locktime: 0,
