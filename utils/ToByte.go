@@ -9,7 +9,7 @@ import (
 )
 
 // to data (block, tx or int) to array of bytes
-func ToByte[T *model.Transaction | *model.Block | int](data T) []byte {
+func ToByte[T *model.Transaction | *model.Block | int | string](data T) []byte {
 	var buff bytes.Buffer
 
 	encoder := gob.NewEncoder(&buff)
