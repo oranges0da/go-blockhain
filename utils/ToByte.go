@@ -5,10 +5,11 @@ import (
 	"encoding/gob"
 
 	"github.com/oranges0da/goblockchain/handle"
+	"github.com/oranges0da/goblockchain/model"
 )
 
-// to data (such as block or transaction) to byte, for hashing, etc
-func ToByte[T any](data T) []byte {
+// to data (block, tx or int) to array of bytes
+func ToByte[T *model.Transaction | *model.Block | int](data T) []byte {
 	var buff bytes.Buffer
 
 	encoder := gob.NewEncoder(&buff)
