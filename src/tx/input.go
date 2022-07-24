@@ -1,8 +1,8 @@
 package tx
 
 import (
-	"github.com/oranges0da/goblockchain/hash_utils"
-	"github.com/oranges0da/goblockchain/model"
+	"github.com/oranges0da/goblockchain/src/hash_utils"
+	"github.com/oranges0da/goblockchain/src/model"
 )
 
 // checks that an address can unclock an input for spending

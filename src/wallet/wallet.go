@@ -8,7 +8,7 @@ import (
 	"crypto/sha256"
 
 	"github.com/mr-tron/base58"
-	"github.com/oranges0da/goblockchain/hash_utils"
+	"github.com/oranges0da/goblockchain/src/hash_utils"
 )
 
 type Wallet struct {

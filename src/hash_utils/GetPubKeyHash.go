@@ -2,7 +2,7 @@ package hash_utils
 
 import (
 	"github.com/mr-tron/base58"
-	"github.com/oranges0da/goblockchain/handle"
+	"github.com/oranges0da/goblockchain/src/handle"
 )
 
 // helper func that deocdes address and removes version byte and checksum to get pubKeyHash

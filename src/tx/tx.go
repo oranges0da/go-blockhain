@@ -6,10 +6,10 @@ import (
 	"errors"
 	"log"
 
-	"github.com/oranges0da/goblockchain/block_utils"
-	"github.com/oranges0da/goblockchain/handle"
-	"github.com/oranges0da/goblockchain/model"
-	"github.com/oranges0da/goblockchain/wallet"
+	"github.com/oranges0da/goblockchain/src/block_utils"
+	"github.com/oranges0da/goblockchain/src/handle"
+	"github.com/oranges0da/goblockchain/src/model"
+	"github.com/oranges0da/goblockchain/src/wallet"
 )
 
 func New(to, from string, amt int, locktime int) *model.Transaction {

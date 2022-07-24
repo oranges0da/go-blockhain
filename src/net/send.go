@@ -11,7 +11,7 @@ import (
 )
 
 /*
-	main function for sending byte data to other known peers on network
+	main function for sending byte data to other known peers on network using tcp
 	byte data will be parsed to relevant data type (block, tx, etc)
 	will also add new discovered nodes to known nodes
 */

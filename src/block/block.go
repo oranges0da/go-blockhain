@@ -1,9 +1,9 @@
 package block
 
 import (
-	"github.com/oranges0da/goblockchain/model"
-	"github.com/oranges0da/goblockchain/proof"
-	"github.com/oranges0da/goblockchain/tx"
+	"github.com/oranges0da/goblockchain/src/model"
+	"github.com/oranges0da/goblockchain/src/proof"
+	"github.com/oranges0da/goblockchain/src/tx"
 )
 
 // first find nonce using proof of work, then return hash of final block

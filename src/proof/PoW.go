@@ -7,8 +7,8 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/oranges0da/goblockchain/model"
-	"github.com/oranges0da/goblockchain/utils"
+	"github.com/oranges0da/goblockchain/src/model"
+	"github.com/oranges0da/goblockchain/src/utils"
 )
 
 const diff = 16

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/oranges0da/goblockchain/block"
-	"github.com/oranges0da/goblockchain/db"
-	"github.com/oranges0da/goblockchain/handle"
-	"github.com/oranges0da/goblockchain/model"
-	"github.com/oranges0da/goblockchain/utils"
+	"github.com/oranges0da/goblockchain/src/block"
+	"github.com/oranges0da/goblockchain/src/db"
+	"github.com/oranges0da/goblockchain/src/handle"
+	"github.com/oranges0da/goblockchain/src/model"
+	"github.com/oranges0da/goblockchain/src/utils"
 	"github.com/xujiajun/nutsdb"
 )
 

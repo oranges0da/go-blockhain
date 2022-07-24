@@ -4,9 +4,7 @@
 
 package net
 
-import (
-	"github.com/oranges0da/goblockchain/model"
-)
+import "github.com/oranges0da/goblockchain/src/model"
 
 const (
 	protocol = "tcp"

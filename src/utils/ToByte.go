@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/gob"
 
-	"github.com/oranges0da/goblockchain/handle"
-	"github.com/oranges0da/goblockchain/model"
+	"github.com/oranges0da/goblockchain/src/handle"
+	"github.com/oranges0da/goblockchain/src/model"
 )
 
 // to data (block, tx or int) to array of bytes

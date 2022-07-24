@@ -3,8 +3,8 @@ package tx
 import (
 	"bytes"
 
-	"github.com/oranges0da/goblockchain/hash_utils"
-	"github.com/oranges0da/goblockchain/model"
+	"github.com/oranges0da/goblockchain/src/hash_utils"
+	"github.com/oranges0da/goblockchain/src/model"
 )
 
 type TxOutput struct {
