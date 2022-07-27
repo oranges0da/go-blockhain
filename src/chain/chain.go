@@ -3,6 +3,7 @@ package chain
 import (
 	"fmt"
 	"runtime"
+	"time"
 
 	"github.com/oranges0da/goblockchain/src/block"
 	"github.com/oranges0da/goblockchain/src/db"
@@ -60,6 +61,9 @@ func (chain *Blockchain) AddBlock(block *model.Block) error {
 	// set lastHash to block hash and increment blockHeight
 	chain.LastHash = block.Hash
 	chain.BlockHeight = block.BlockID
+
+	// set timestamp to unix time
+	block.Timestamp = time.Now().Unix()
 
 	// serialize block
 	byte_block := utils.ToByte(block)

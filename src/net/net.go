@@ -13,7 +13,7 @@ const (
 )
 
 var (
-	nodeAddr        string
+	nodeAddr        string // port of node
 	minerAddr       string
 	knownNodes      = []string{"localhost:3000"}
 	blocksInTransit = [][]byte{}

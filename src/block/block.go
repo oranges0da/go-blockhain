@@ -1,6 +1,8 @@
 package block
 
 import (
+	"time"
+
 	"github.com/oranges0da/goblockchain/src/model"
 	"github.com/oranges0da/goblockchain/src/proof"
 	"github.com/oranges0da/goblockchain/src/tx"
@@ -30,9 +32,10 @@ func Genesis(addr string) *model.Block {
 	coinbase := tx.NewCoinbase(addr, msg)
 
 	block := &model.Block{
-		PrevHash:    []byte("0"),
 		BlockID:     0,
+		Timestamp:   time.Now().Unix(),
 		Nonce:       0,
+		PrevHash:    []byte("0"),
 		Transaction: coinbase,
 	}
 

@@ -8,6 +8,9 @@ import (
 	"io"
 	"log"
 	"net"
+
+	"github.com/oranges0da/goblockchain/src/model"
+	"github.com/oranges0da/goblockchain/src/utils"
 )
 
 /*
@@ -40,4 +43,12 @@ func SendData(addr string, data []byte) {
 	if err != nil {
 		log.Panic(err)
 	}
+}
+
+func SendBlock(addr string, b *model.Block) {
+	data := Block{nodeAddr, utils.ToByte[*model.Block](b)}
+	payload := utils.ToByte[any](data)
+	request := append(CmdToBytes("block"), payload...)
+
+	SendData(addr, request)
 }
