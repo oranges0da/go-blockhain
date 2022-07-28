@@ -8,7 +8,7 @@ import (
 	"github.com/oranges0da/goblockchain/src/model"
 )
 
-func ToBlock(data []byte) model.Block {
+func ToBlock(data []byte) *model.Block {
 	var block model.Block
 
 	decoder := gob.NewDecoder(bytes.NewReader(data))
@@ -16,5 +16,5 @@ func ToBlock(data []byte) model.Block {
 	err := decoder.Decode(&block)
 	handle.Handle(err, "Error whilst trying to convert to block.")
 
-	return block
+	return &block
 }

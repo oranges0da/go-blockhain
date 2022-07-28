@@ -92,9 +92,15 @@ func AskBlocks(addr string) {
 }
 
 // request for data from peer
-func SendGetData(address, kind string, id []byte) {
+func AskData(address, kind string, id []byte) {
 	payload := utils.ToByte(GetData{nodeAddr, kind, id})
 	request := append(CmdToBytes("getdata"), payload...)
 
 	SendData(address, request)
+}
+
+func AskAllBlocks() {
+	for _, node := range knownNodes {
+		AskBlocks(node)
+	}
 }
