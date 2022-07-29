@@ -19,7 +19,6 @@ import (
 	byte data will be parsed to relevant data type (block, tx, etc)
 	will also add new discovered nodes to known nodes
 */
-
 func SendData(addr string, data []byte) {
 	conn, err := net.Dial(protocol, addr)
 
