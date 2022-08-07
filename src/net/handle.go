@@ -108,3 +108,18 @@ func HandleGetBlocks(request []byte, chain *chain.Blockchain) {
 	blocks := block_utils.GetBlockHashes()
 	SendInv(payload.AddrFrom, "block", blocks)
 }
+
+func HandleAskBlocks(request []byte, chain *chain.Blockchain) {
+	var buff bytes.Buffer
+	var payload GetBlocks
+
+	buff.Write(request[cmdLen:])
+	dec := gob.NewDecoder(&buff)
+	err := dec.Decode(&payload)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	blocks := block_utils.GetBlockHashes()
+	SendInv(payload.AddrFrom, "block", blocks)
+}
